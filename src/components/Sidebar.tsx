@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { motion } from 'framer-motion';
 import {
   SquareKanban,
   SquareCheckBig,
@@ -13,16 +14,18 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Nav } from "@/components/Nav";
+import { SPRING } from "@/constants";
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   return (
-    // TODO: add a transition to the sidebar (hint: use the `framer motion layout` utility)
-    <aside
+    <motion.aside
+      initial={{ width: 200 }}
+      animate={{ width: isCollapsed ? 60 : 200 }}
+      transition={SPRING}
       className={cn(
         "flex flex-col justify-between h-screen border-r",
-        isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out"
       )}
     >
       <div className="flex flex-col items-center w-full">
@@ -72,13 +75,13 @@ export function Sidebar() {
 
       <div className="group flex flex-col items-center gap-2 py-2">
         <Separator />
-        <div className="flex flex-col items-center gap-2 px-2">
+        <div className="w-full flex flex-col items-center gap-2 px-2">
           <ThemeToggle isCollapsed={isCollapsed} />
           <Button variant="outline" size={isCollapsed ? "icon" : "sidebar"}>
             {isCollapsed ? "TD" : "Tommaso Dossena"}
           </Button>
         </div>
       </div>
-    </aside>
+    </motion.aside>
   );
 }
