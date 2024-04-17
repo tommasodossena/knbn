@@ -1,9 +1,10 @@
 "use client";
 import * as React from "react";
+import { UserButton } from "@clerk/nextjs";
 import { motion } from 'framer-motion';
 import {
   SquareKanban,
-  SquareCheckBig,
+  Asterisk,
   PanelRightClose,
   PanelRightOpen,
 } from "lucide-react";
@@ -24,9 +25,7 @@ export function Sidebar() {
       initial={{ width: 200 }}
       animate={{ width: isCollapsed ? 60 : 200 }}
       transition={SPRING}
-      className={cn(
-        "flex flex-col justify-between h-screen border-r",
-      )}
+      className="flex flex-col justify-between rounded-md bg-neutral-50 dark:bg-neutral-900"
     >
       <div className="flex flex-col items-center w-full">
         <div
@@ -58,16 +57,16 @@ export function Sidebar() {
           isCollapsed={isCollapsed}
           links={[
             {
-              title: "Board",
+              title: "Boards List",
               label: "3",
-              href: "/board",
+              href: "/boards",
               icon: SquareKanban,
             },
             {
-              title: "Tasks",
-              label: "12",
-              href: "/tasks",
-              icon: SquareCheckBig,
+              title: "Board 1",
+              label: "3",
+              href: "/boards/1",
+              icon: Asterisk,
             },
           ]}
         />
@@ -77,9 +76,20 @@ export function Sidebar() {
         <Separator />
         <div className="w-full flex flex-col items-center gap-2 px-2">
           <ThemeToggle isCollapsed={isCollapsed} />
-          <Button variant="outline" size={isCollapsed ? "icon" : "sidebar"}>
+          {/* <Button variant="outline" size={isCollapsed ? "icon" : "sidebar"}>
             {isCollapsed ? "TD" : "Tommaso Dossena"}
-          </Button>
+          </Button> */}
+          <UserButton
+            afterSignOutUrl="/"
+            appearance={{
+              elements: {
+                avatarBox: {
+                  height: 30,
+                  width: 30,
+                },
+              },  
+            }}
+          />
         </div>
       </div>
     </motion.aside>
