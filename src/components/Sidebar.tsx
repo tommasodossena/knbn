@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { UserButton } from "@clerk/nextjs";
 import { motion } from 'framer-motion';
 import {
   SquareKanban,
@@ -14,6 +13,7 @@ import { Typography } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { UserButton } from "@/components/UserButton";
 import { Nav } from "@/components/Nav";
 import { SPRING } from "@/constants";
 
@@ -25,7 +25,7 @@ export function Sidebar() {
       initial={{ width: 200 }}
       animate={{ width: isCollapsed ? 60 : 200 }}
       transition={SPRING}
-      className="flex flex-col justify-between rounded-md bg-neutral-50 dark:bg-neutral-900"
+      className="flex flex-col justify-between rounded-md bg-neutral-100 dark:bg-neutral-900"
     >
       <div className="flex flex-col items-center w-full">
         <div
@@ -75,21 +75,8 @@ export function Sidebar() {
       <div className="group flex flex-col items-center gap-2 py-2">
         <Separator />
         <div className="w-full flex flex-col items-center gap-2 px-2">
-          <ThemeToggle isCollapsed={isCollapsed} />
-          {/* <Button variant="outline" size={isCollapsed ? "icon" : "sidebar"}>
-            {isCollapsed ? "TD" : "Tommaso Dossena"}
-          </Button> */}
-          <UserButton
-            afterSignOutUrl="/"
-            appearance={{
-              elements: {
-                avatarBox: {
-                  height: 30,
-                  width: 30,
-                },
-              },  
-            }}
-          />
+          <ThemeToggle isCollapsed={isCollapsed} />          
+          <UserButton isCollapsed={isCollapsed} />
         </div>
       </div>
     </motion.aside>
