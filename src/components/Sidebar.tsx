@@ -3,6 +3,7 @@ import * as React from "react";
 import { motion } from 'framer-motion';
 import {
   SquareKanban,
+  Sparkle,
   Asterisk,
   PanelRightClose,
   PanelRightOpen,
@@ -17,66 +18,78 @@ import { UserButton } from "@/components/UserButton";
 import { Nav } from "@/components/Nav";
 import { SPRING } from "@/constants";
 
-export function Sidebar() {
+interface SidebarProps {
+  className?: string;
+}
+
+export function Sidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   return (
     <motion.aside
       initial={{ width: 200 }}
-      animate={{ width: isCollapsed ? 60 : 200 }}
+      animate={{ width: isCollapsed ? 76 : 200 }}
       transition={SPRING}
-      className="flex flex-col justify-between rounded-md bg-neutral-100 dark:bg-neutral-900"
+      className={cn(className, "p-2")}
     >
-      <div className="flex flex-col items-center w-full">
-        <div
-          className={cn(
-            "w-full flex h-[60px] items-center justify-between px-2",
-            isCollapsed && "justify-center"
-          )}
-        >
-          <Typography
-            variant="h4"
-            as="h1"
-            className={cn(isCollapsed && "sr-only")}
+      <div className="w-full h-full flex flex-col justify-between rounded-md bg-neutral-100 dark:bg-neutral-900">
+        <div className="flex flex-col items-center w-full">
+          <div
+            className={cn(
+              "w-full flex h-[60px] items-center justify-between px-2",
+              isCollapsed && "justify-center"
+            )}
           >
-            knbn
-          </Typography>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            {isCollapsed ? <PanelRightClose /> : <PanelRightOpen />}
-            {!isCollapsed && <span className="sr-only">Toggle Sidebar</span>}
-          </Button>
+            {/* TODO: add logo image */}
+            <Typography
+              variant="h4"
+              as="h1"
+              className={cn(isCollapsed && "sr-only")}
+            >
+              knbn
+            </Typography>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+            >
+              {isCollapsed ? <PanelRightClose /> : <PanelRightOpen />}
+              {!isCollapsed && <span className="sr-only">Toggle Sidebar</span>}
+            </Button>
+          </div>
+
+          <Separator />
+          
+          <Nav
+            isCollapsed={isCollapsed}
+            links={[
+              {
+                title: "Boards List",
+                label: "3",
+                href: "/boards",
+                icon: SquareKanban,
+              },
+              {
+                title: "Board 1",
+                label: "4",
+                href: "/boards/1",
+                icon: Sparkle,
+              },
+              {
+                title: "Board 2",
+                label: "7",
+                href: "/boards/2",
+                icon: Asterisk,
+              },
+            ]}
+          />
         </div>
-
-        <Separator />
-        
-        <Nav
-          isCollapsed={isCollapsed}
-          links={[
-            {
-              title: "Boards List",
-              label: "3",
-              href: "/boards",
-              icon: SquareKanban,
-            },
-            {
-              title: "Board 1",
-              label: "3",
-              href: "/boards/1",
-              icon: Asterisk,
-            },
-          ]}
-        />
-      </div>
-
-      <div className="group flex flex-col items-center gap-2 py-2">
-        <Separator />
-        <div className="w-full flex flex-col items-center gap-2 px-2">
-          <ThemeToggle isCollapsed={isCollapsed} />          
-          <UserButton isCollapsed={isCollapsed} />
+        <div className="group flex flex-col items-center gap-2 pb-2">
+          <Separator />
+          <div className="w-full flex flex-col items-center gap-2 px-2">
+            <ThemeToggle isCollapsed={isCollapsed} />          
+            <UserButton isCollapsed={isCollapsed} />
+          </div>
         </div>
       </div>
     </motion.aside>

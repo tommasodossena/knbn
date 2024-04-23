@@ -29,12 +29,9 @@ export default function BoardsLayout({ children }: BoardsLayoutProps) {
       disableTransitionOnChange
     >
       <TooltipProvider delayDuration={0}>
-        <div className="flex h-screen max-h-[calc(100vh-1rem)] m-2">
-          <Sidebar />
-          <div className="flex-1 flex flex-col">
-            <Header title={title} />
-            <main>{children}</main>
-          </div>
+        <div className="flex">
+          <Sidebar className="sticky top-0 h-screen" />
+          <main className="flex-1 px-3">{children}</main>
         </div>
       </TooltipProvider>
     </ThemeProvider>

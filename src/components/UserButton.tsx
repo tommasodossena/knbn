@@ -47,8 +47,8 @@ export function UserButton({ isCollapsed }: UserButtonProps) {
           {isCollapsed ? user.firstName?.charAt(0) + (user.lastName?.charAt(0) ?? '') : user.fullName}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 mb-4" side="right">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuContent className="w-56 mb-2" side="right" sideOffset={20}>
+        <DropdownMenuLabel>{user.fullName}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => openUserProfile()}>
