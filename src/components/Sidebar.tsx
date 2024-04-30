@@ -1,12 +1,13 @@
 "use client";
 import * as React from "react";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import {
-  SquareKanban,
+  Compass,
   Sparkle,
   Asterisk,
   PanelRightClose,
   PanelRightOpen,
+  Plus,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -65,9 +66,8 @@ export function Sidebar({ className }: SidebarProps) {
             links={[
               {
                 title: "Boards List",
-                label: "3",
                 href: "/boards",
-                icon: SquareKanban,
+                icon: Compass,
               },
               {
                 title: "Board 1",
@@ -80,6 +80,10 @@ export function Sidebar({ className }: SidebarProps) {
                 label: "7",
                 href: "/boards/2",
                 icon: Asterisk,
+              },
+              {
+                title: "Create Board",
+                icon: Plus,
               },
             ]}
           />
