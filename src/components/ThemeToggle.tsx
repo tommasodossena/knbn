@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -12,7 +12,7 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ isCollapsed }: ThemeToggleProps) {
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
   function handleClick() {
@@ -20,7 +20,7 @@ export function ThemeToggle({ isCollapsed }: ThemeToggleProps) {
     setTheme(nextTheme);
   }
 
-  React.useEffect(() => setMounted(true), []);
+  useEffect(() => setMounted(true), []);
 
   if (!mounted) {
     return (

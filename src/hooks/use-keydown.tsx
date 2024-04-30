@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 interface KeydownCallback {
   (): void;
 }
 
 function useKeydown(key: string, callback: KeydownCallback): void {
-  React.useEffect(() => {
+  useEffect(() => {
     function handleKeyDown(event: KeyboardEvent): void {
       if (event.code === key) {
         callback();
