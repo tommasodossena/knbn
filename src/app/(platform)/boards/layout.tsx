@@ -30,8 +30,8 @@ export default function BoardsLayout({ children }: BoardsLayoutProps) {
     >
       <TooltipProvider delayDuration={0}>
         <div className="flex">
-          <Sidebar className="sticky top-0 h-screen" />
-          <main className="flex-1 px-3">{children}</main>
+          <Sidebar className="sticky top-0 left-0 h-screen" />
+          <main className="flex-1 px-3 py-2">{children}</main>
         </div>
       </TooltipProvider>
     </ThemeProvider>

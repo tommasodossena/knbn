@@ -7,7 +7,7 @@ import { BoardCard } from '@/components/BoardCard';
 
 export default function BoardsPage() {
   return (
-    <div className="flex flex-col gap-3 pt-4 pb-2">
+    <div className="flex flex-col gap-3 pt-2 pb-2">
       <div className="flex items-center gap-2">
         <Button variant="secondary">Create Board</Button>
         <Input type="search" placeholder="Search Boards" />
