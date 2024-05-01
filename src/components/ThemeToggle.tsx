@@ -1,54 +1,81 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { cn } from "@/lib/utils";
 import { Skeleton } from "./ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { SPRING } from "@/constants";
 
 interface ThemeToggleProps {
   isCollapsed: boolean;
 }
 
-export function ThemeToggle({ isCollapsed }: ThemeToggleProps) {
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
+  function ThemeToggle({ isCollapsed, ...props }, ref) {
+    const [mounted, setMounted] = useState(false);
+    const { theme, setTheme } = useTheme();
+    const themeControls = useAnimation();
+    const collapseControls = useAnimation();
 
-  function handleClick() {
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
-  }
+    function handleClick() {
+      const nextTheme = theme === 'light' ? 'dark' : 'light';
+      setTheme(nextTheme);
+      themeControls.start({ rotate: theme === 'light' ? 0 : -180 }, { type: "spring", duration: 0.75 });
+    }
 
-  useEffect(() => setMounted(true), []);
+    useEffect(() => setMounted(true), []);
 
-  if (!mounted) {
+    const hoverEffect = {
+      rotate: [0, 15, -15, 15, -15, 0],
+      transition: { duration: 0.6 },
+    };
+
+    useEffect(() => {
+      if (isCollapsed) {
+        collapseControls.start({ opacity: 0, x: -10, transition: { ...SPRING, delay: 0.1 } });
+      } else {
+        collapseControls.start({ opacity: 1, x: 0, transition: { ...SPRING, delay: 0.1 } });
+      }
+    }, [isCollapsed, collapseControls]);
+
+    if (!mounted) {
+      return (
+        <Skeleton className={cn("w-full h-10")} />
+      )
+    }
+
     return (
-      <Skeleton className={cn("w-full h-10")} />
-    )
+      <Button
+        variant="outline"
+        size={isCollapsed ? "icon" : "sidebar"}
+        onClick={handleClick}
+        onMouseEnter={() => themeControls.start(hoverEffect)}
+        onMouseLeave={() => themeControls.stop()}
+        ref={ref}
+        {...props}
+      >
+        <div className="w-full flex items-center justify-center">
+          <motion.div
+            animate={themeControls}
+            transition={{ type: "spring", stiffness: 700, damping: 30 }}
+          >
+            {theme === 'light' ? <Sun size="20" /> : <Moon size="20" />}
+          </motion.div>
+          <motion.div
+            initial={false}
+            animate={collapseControls}
+            className={cn("pl-2", isCollapsed && "sr-only")}
+          >
+            Toggle theme
+          </motion.div>
+        </div>
+      </Button>
+    );
   }
+);
 
-  return (
-    <Button
-      variant="outline"
-      size={isCollapsed ? "icon" : "sidebar"}
-      onClick={handleClick}
-    >
-      <div className="w-full flex items-center justify-center">
-        <Moon
-          className={cn("h-[1.2rem] w-[1.2rem]",
-            theme !== "dark" && "hidden",
-            !isCollapsed && "mr-2"
-          )}
-        />
-        <Sun
-          className={cn("h-[1.2rem] w-[1.2rem]",
-            theme === "dark" && "hidden",
-            !isCollapsed && "mr-2"
-          )}
-        />
-        {!isCollapsed && <span>Toggle Theme</span>}
-      </div>
-    </Button>
-  );
-}
+
+export { ThemeToggle };

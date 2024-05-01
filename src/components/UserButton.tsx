@@ -27,55 +27,64 @@ interface UserButtonProps {
   isCollapsed: boolean;
 }
 
-export function UserButton({ isCollapsed }: UserButtonProps) {
-  const { isLoaded, user } = useUser();
-  const { signOut, openUserProfile } = useClerk();
-  const router = useRouter();
+const UserButton = React.forwardRef<HTMLButtonElement, UserButtonProps>(
+  function UserButton({ isCollapsed, ...props }, ref) {
+    const { isLoaded, user } = useUser();
+    const { signOut, openUserProfile } = useClerk();
+    const router = useRouter();
 
-  if (!isLoaded) {
+    if (!isLoaded) {
+      return (
+        <Skeleton className={cn("w-full h-10")} />
+      )
+    }
+  
+    if (!user) return null;
+
     return (
-      <Skeleton className={cn("w-full h-10")} />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            size={isCollapsed ? "icon" : "sidebar"}
+            ref={ref}
+            {...props}
+          >
+            {isCollapsed ? user.firstName?.charAt(0) + (user.lastName?.charAt(0) ?? '') : user.fullName}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56 mb-2" side="right" sideOffset={20}>
+          <DropdownMenuLabel>{user.fullName}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem onClick={() => openUserProfile()}>
+              <User className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuItem>
+            <LifeBuoy className="mr-2 h-4 w-4" />
+            <span>Support</span>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => signOut(() => router.push('/'))}>
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Log out</span>
+            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     )
   }
- 
-  if (!user) return null;
+);
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size={isCollapsed ? "icon" : "sidebar"}>
-          {isCollapsed ? user.firstName?.charAt(0) + (user.lastName?.charAt(0) ?? '') : user.fullName}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 mb-2" side="right" sideOffset={20}>
-        <DropdownMenuLabel>{user.fullName}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => openUserProfile()}>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuItem>
-          <LifeBuoy className="mr-2 h-4 w-4" />
-          <span>Support</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut(() => router.push('/'))}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
+export { UserButton };
 
 
 

@@ -1,5 +1,5 @@
 export const SPRING = {
   type: 'spring',
-  stiffness: 300,
-  damping: 25,
+  duration: 0.4,
+  bounce: 0.1,
 };

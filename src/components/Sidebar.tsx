@@ -9,6 +9,7 @@ import {
   PanelRightOpen,
   Plus,
 } from "lucide-react";
+import { SPRING } from "@/constants";
 
 import { cn } from "@/lib/utils";
 import { Typography } from "@/components/ui/typography";
@@ -17,11 +18,12 @@ import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { UserButton } from "@/components/UserButton";
 import { Nav } from "@/components/Nav";
-import { SPRING } from "@/constants";
 
 interface SidebarProps {
   className?: string;
 }
+
+const MotionTypography = motion(Typography);
 
 export function Sidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -41,14 +43,19 @@ export function Sidebar({ className }: SidebarProps) {
               isCollapsed && "justify-center"
             )}
           >
-            {/* TODO: add logo image */}
-            <Typography
+            <MotionTypography
               variant="h4"
               as="h1"
               className={cn(isCollapsed && "sr-only")}
+              initial={false}
+              animate={{ 
+                opacity: isCollapsed ? 0 : 1,
+                x: isCollapsed ? -10 : 0,
+              }}
+              transition={SPRING}
             >
               knbn
-            </Typography>
+            </MotionTypography>
             <Button
               variant="outline"
               size="icon"

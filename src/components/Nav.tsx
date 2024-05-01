@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from 'framer-motion';
 import { LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { SPRING } from "@/constants";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -48,7 +49,7 @@ const NavItem: React.FC<NavItemProps> = ({ link, isCollapsed, pathname }) => {
   const motionProps = {
     initial: false,
     animate: isCollapsed ? "collapsed" : "expanded",
-    transition: { type: "spring", stiffness: 200, damping: 16 },
+    transition: { ...SPRING, delay: 0.1},
     variants: {
       collapsed: { opacity: 0, x: -10 },
       expanded: { opacity: 1, x: 0 },
