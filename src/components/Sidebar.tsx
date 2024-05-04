@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Compass,
@@ -20,18 +20,30 @@ import { UserButton } from "@/components/UserButton";
 import { Nav } from "@/components/Nav";
 
 interface SidebarProps {
+  collapsedSize?: number;
+  defaultSize?: number;
+  defaultCollapsed?: boolean;
   className?: string;
 }
 
 const MotionTypography = motion(Typography);
 
-export function Sidebar({ className }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+export function Sidebar({
+  collapsedSize = 76,
+  defaultSize = 200,
+  defaultCollapsed = true,
+  className
+}: SidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+
+  const toggleCollapse = () => {
+    setIsCollapsed(prevState => !prevState);
+  };
 
   return (
     <motion.aside
-      initial={{ width: 200 }}
-      animate={{ width: isCollapsed ? 76 : 200 }}
+      initial={false}
+      animate={{ width: isCollapsed ? collapsedSize : defaultSize }}
       transition={SPRING}
       className={cn(className, "p-2")}
     >
@@ -59,7 +71,7 @@ export function Sidebar({ className }: SidebarProps) {
             <Button
               variant="outline"
               size="icon"
-              onClick={() => setIsCollapsed(!isCollapsed)}
+              onClick={toggleCollapse}
             >
               {isCollapsed ? <PanelRightClose /> : <PanelRightOpen />}
               {!isCollapsed && <span className="sr-only">Toggle Sidebar</span>}

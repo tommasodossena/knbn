@@ -8,6 +8,7 @@ import { SPRING } from "@/constants";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Tooltip,
   TooltipContent,
@@ -98,15 +99,15 @@ export function Nav({ isCollapsed, links }: NavProps) {
   const pathname = usePathname();
 
   return (
-    <div
+    <ScrollArea
       data-collapsed={isCollapsed}
-      className="group w-full flex flex-col gap-4 py-2 max-h-[calc(100vh-182px)] overflow-y-auto overflow-x-hidden relative"
+      className="group w-full max-h-[calc(100vh-182px)]"
     >
-      <nav className="grid gap-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2 shrink-0">
+      <nav className="grid gap-2 p-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2 shrink-0 relative">
         {links.map((link, index) =>
           <NavItem key={index} link={link} isCollapsed={isCollapsed} pathname={pathname} />
         )}
       </nav>
-    </div>
+    </ScrollArea>
   );
 }

@@ -6,6 +6,7 @@ import {
 
 import { Typography } from '@/components/ui/typography';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 import {
   Card,
@@ -16,15 +17,16 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-// interface BoardCardProps {
-//   title: string;
-//   description: string;
-//   href: string;
-// }
+interface BoardCardProps {
+  // title: string;
+  // description: string;
+  // href: string;
+  className?: string;
+}
 
-export function BoardCard() {
+export function BoardCard({ className }: BoardCardProps) {
   return (
-    <Card className="dark:bg-neutral-900">
+    <Card className={cn('dark:bg-neutral-900', className)}>
       <CardHeader>
         <CardTitle>Board Name</CardTitle>
       </CardHeader>

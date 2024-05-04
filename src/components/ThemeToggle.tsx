@@ -13,6 +13,8 @@ interface ThemeToggleProps {
   isCollapsed: boolean;
 }
 
+const MotionButton = motion(Button);
+
 const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
   function ThemeToggle({ isCollapsed, ...props }, ref) {
     const [mounted, setMounted] = useState(false);
@@ -20,18 +22,7 @@ const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
     const themeControls = useAnimation();
     const collapseControls = useAnimation();
 
-    function handleClick() {
-      const nextTheme = theme === 'light' ? 'dark' : 'light';
-      setTheme(nextTheme);
-      themeControls.start({ rotate: theme === 'light' ? 0 : -180 }, { type: "spring", duration: 0.75 });
-    }
-
     useEffect(() => setMounted(true), []);
-
-    const hoverEffect = {
-      rotate: [0, 15, -15, 15, -15, 0],
-      transition: { duration: 0.6 },
-    };
 
     useEffect(() => {
       if (isCollapsed) {
@@ -41,6 +32,12 @@ const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
       }
     }, [isCollapsed, collapseControls]);
 
+    function handleClick() {
+      const nextTheme = theme === 'light' ? 'dark' : 'light';
+      setTheme(nextTheme);
+      themeControls.start({ rotate: theme === 'light' ? 0 : -180 }, { type: "spring", duration: 0.75 });
+    }
+
     if (!mounted) {
       return (
         <Skeleton className={cn("w-full h-10")} />
@@ -48,12 +45,12 @@ const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
     }
 
     return (
-      <Button
+      <MotionButton
         variant="outline"
         size={isCollapsed ? "icon" : "sidebar"}
         onClick={handleClick}
-        onMouseEnter={() => themeControls.start(hoverEffect)}
-        onMouseLeave={() => themeControls.stop()}
+        onMouseEnter={() => themeControls.start({ rotate: [0, 15, -15, 15, -15, 0], transition: { duration: 0.6 } })}
+        onMouseLeave={() => themeControls.start({ rotate: 0 })}
         ref={ref}
         {...props}
       >
@@ -72,7 +69,7 @@ const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
             Toggle theme
           </motion.div>
         </div>
-      </Button>
+      </MotionButton>
     );
   }
 );
