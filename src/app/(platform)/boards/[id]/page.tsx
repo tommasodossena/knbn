@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Typography } from '@/components/ui/typography';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Board } from "@/components/Board"
+import { Tasks } from "@/components/Tasks"
 
 export default function BoardPage({
   params,
@@ -22,11 +23,8 @@ export default function BoardPage({
       <TabsContent value="board" className="m-0 pt-3 w-full h-full max-h-[calc(100%-60px)]">
         <Board />
       </TabsContent>
-      <TabsContent value="task" className="m-0 pt-3">
-        {/* data table view component with all tasks */}
-        <Typography variant="p">Task 1</Typography>
-        <Typography variant="p">Task 2</Typography>
-        <Typography variant="p">Task 3</Typography>
+      <TabsContent value="task" className="m-0 pt-3 w-full h-full max-h-[calc(100%-60px)]">
+        <Tasks />
       </TabsContent>
     </Tabs>
   );
