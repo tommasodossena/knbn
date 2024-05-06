@@ -35,7 +35,7 @@ const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
     function handleClick() {
       const nextTheme = theme === 'light' ? 'dark' : 'light';
       setTheme(nextTheme);
-      themeControls.start({ rotate: theme === 'light' ? 0 : -180 }, { type: "spring", duration: 0.75 });
+      themeControls.start({ rotate: theme === 'light' ? 0 : -90 }, { type: "spring", duration: 0.5 });
     }
 
     if (!mounted) {
@@ -49,8 +49,6 @@ const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
         variant="outline"
         size={isCollapsed ? "icon" : "sidebar"}
         onClick={handleClick}
-        onMouseEnter={() => themeControls.start({ rotate: [0, 15, -15, 15, -15, 0], transition: { duration: 0.6 } })}
-        onMouseLeave={() => themeControls.start({ rotate: 0 })}
         ref={ref}
         {...props}
       >

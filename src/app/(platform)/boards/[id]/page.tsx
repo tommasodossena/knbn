@@ -11,7 +11,7 @@ export default function BoardPage({
 }) {
   return (
     <Tabs defaultValue="board" className="flex flex-col h-full w-full py-2">
-      <div className="h-[60px] shrink-0 flex justify-between items-center">
+      <div className="h-[60px] shrink-0 flex justify-between items-center pr-3">
         <Typography as="h2" variant="h4">Board {params.id}</Typography>
         <TabsList>
           <TabsTrigger value="board">Board</TabsTrigger>
@@ -19,7 +19,7 @@ export default function BoardPage({
         </TabsList>
       </div>
 
-      <TabsContent value="board" className="m-0 pt-3 w-full h-full">
+      <TabsContent value="board" className="m-0 pt-3 w-full h-full max-h-[calc(100%-60px)]">
         <Board />
       </TabsContent>
       <TabsContent value="task" className="m-0 pt-3">

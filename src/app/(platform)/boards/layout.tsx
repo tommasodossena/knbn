@@ -21,7 +21,7 @@ export default function BoardsLayout({ children }: BoardsLayoutProps) {
       <TooltipProvider delayDuration={0}>
         <div className="grid grid-cols-[auto,minmax(0,1fr)] w-full">
           <Sidebar className="h-screen" />
-          <main className="h-screen w-full px-3">
+          <main className="h-screen w-full pl-2">
             {children}
           </main>
         </div>

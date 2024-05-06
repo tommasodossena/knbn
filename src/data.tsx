@@ -1,37 +1,120 @@
-export const boards = [
+export const taskLabels = [
   {
-    label: "Board 1",
-    icon: (
-      <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <title>Vercel</title>
-        <path d="M24 22.525H0l12-21.05 12 21.05z" fill="currentColor" />
-      </svg>
-    ),
+    value: "bug",
+    label: "Bug",
   },
   {
-    label: "Board 2",
-    icon: (
-      <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <title>Gmail</title>
-        <path
-          d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"
-          fill="currentColor"
-        />
-      </svg>
-    ),
+    value: "feature",
+    label: "Feature",
   },
   {
-    label: "Board 3",
-    icon: (
-      <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <title>iCloud</title>
-        <path
-          d="M13.762 4.29a6.51 6.51 0 0 0-5.669 3.332 3.571 3.571 0 0 0-1.558-.36 3.571 3.571 0 0 0-3.516 3A4.918 4.918 0 0 0 0 14.796a4.918 4.918 0 0 0 4.92 4.914 4.93 4.93 0 0 0 .617-.045h14.42c2.305-.272 4.041-2.258 4.043-4.589v-.009a4.594 4.594 0 0 0-3.727-4.508 6.51 6.51 0 0 0-6.511-6.27z"
-          fill="currentColor"
-        />
-      </svg>
-    ),
+    value: "refactor",
+    label: "Refactor",
+  },
+  {
+    value: "design",
+    label: "Design",
+  },
+  {
+    value: "documentation",
+    label: "Documentation",
+  },
+  {
+    value: "chore",
+    label: "Chore",
+  },
+  {
+    value: "test",
+    label: "Test",
+  },
+  {
+    value: "performance",
+    label: "Performance",
+  },
+  {
+    value: "security",
+    label: "Security",
+  },
+  {
+    value: "maintenance",
+    label: "Maintenance",
+  },
+  {
+    value: "other",
+    label: "Other",
   },
 ]
 
-export type Boards = (typeof boards)[number]
+export const taskStatuses = [
+  {
+    id: "backlog" as const,
+    title: "Backlog",
+  },
+  {
+    id: "todo" as const,
+    title: "Todo",
+  },
+  {
+    id: "in-progress" as const,
+    title: "In progress",
+  },
+  {
+    id: "done" as const,
+    title: "Done",
+  },
+];
+
+export const taskPriorities = [
+  {
+    value: "low",
+    label: "Low",
+  },
+  {
+    value: "medium",
+    label: "Medium",
+  },
+  {
+    value: "high",
+    label: "High",
+  },
+]
+
+export type ColumnId = (typeof taskStatuses)[number]["id"] | null;
+
+export const initialTasks = [
+  {
+    id: "task1",
+    columnId: "done" as ColumnId,
+    content: "Project initiation and planning",
+    label: "feature",
+    priority: "low",
+  },
+  {
+    id: "task2",
+    columnId: "in-progress" as ColumnId,
+    content: "Designing the application architecture",
+    label: "design",
+    priority: "medium",
+  },
+  {
+    id: "task3",
+    columnId: "todo" as ColumnId,
+    content: "Writing unit tests",
+    label: "test",
+    priority: "high",
+  },
+  {
+    id: "task4",
+    columnId: "backlog" as ColumnId,
+    content: "Refactoring the code",
+    label: "refactor",
+    priority: "medium",
+  },
+  {
+    id: "task5",
+    columnId: "backlog" as ColumnId,
+    content: "Documenting the code",
+    label: "documentation",
+    priority: "low",
+  },
+];
