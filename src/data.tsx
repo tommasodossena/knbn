@@ -48,19 +48,23 @@ export const taskLabels = [
 export const taskStatuses = [
   {
     id: "backlog" as const,
-    title: "Backlog",
+    value: "backlog",
+    label: "Backlog",
   },
   {
     id: "todo" as const,
-    title: "Todo",
+    value: "todo",
+    label: "Todo",
   },
   {
     id: "in-progress" as const,
-    title: "In progress",
+    value: "in-progress",
+    label: "In progress",
   },
   {
     id: "done" as const,
-    title: "Done",
+    value: "done",
+    label: "Done",
   },
 ];
 
@@ -83,35 +87,35 @@ export type ColumnId = (typeof taskStatuses)[number]["id"] | null;
 
 export const initialTasks = [
   {
-    id: "task1",
+    id: "0001",
     columnId: "done" as ColumnId,
     content: "Project initiation and planning",
     label: "Feature",
     priority: "low",
   },
   {
-    id: "task2",
+    id: "0002",
     columnId: "in-progress" as ColumnId,
     content: "Designing the application architecture",
     label: "Design",
     priority: "medium",
   },
   {
-    id: "task3",
+    id: "0003",
     columnId: "todo" as ColumnId,
     content: "Writing unit tests",
     label: "Test",
     priority: "high",
   },
   {
-    id: "task4",
+    id: "0004",
     columnId: "backlog" as ColumnId,
     content: "Refactoring the code",
     label: "Refactor",
     priority: "medium",
   },
   {
-    id: "task5",
+    id: "0005",
     columnId: "backlog" as ColumnId,
     content: "Documenting the code",
     label: "Documentation",

@@ -60,7 +60,7 @@ const Board = () => {
       if (active.data.current?.type === "Column") {
         const startColumnIdx = columnsId.findIndex((id) => id === active.id);
         const startColumn = columns[startColumnIdx];
-        return `Picked up Column ${startColumn?.title} at position: ${
+        return `Picked up Column ${startColumn?.value} at position: ${
           startColumnIdx + 1
         } of ${columnsId.length}`;
       } else if (active.data.current?.type === "Task") {
@@ -73,7 +73,7 @@ const Board = () => {
           active.data.current.task.content
         } at position: ${taskPosition + 1} of ${
           tasksInColumn.length
-        } in column ${column?.title}`;
+        } in column ${column?.value}`;
       }
     },
     onDragOver({ active, over }) {
@@ -84,8 +84,8 @@ const Board = () => {
         over.data.current?.type === "Column"
       ) {
         const overColumnIdx = columnsId.findIndex((id) => id === over.id);
-        return `Column ${active.data.current.column.title} was moved over ${
-          over.data.current.column.title
+        return `Column ${active.data.current.column.value} was moved over ${
+          over.data.current.column.value
         } at position ${overColumnIdx + 1} of ${columnsId.length}`;
       } else if (
         active.data.current?.type === "Task" &&
@@ -98,13 +98,13 @@ const Board = () => {
         if (over.data.current.task.columnId !== pickedUpTaskColumn.current) {
           return `Task ${
             active.data.current.task.content
-          } was moved over column ${column?.title} in position ${
+          } was moved over column ${column?.value} in position ${
             taskPosition + 1
           } of ${tasksInColumn.length}`;
         }
         return `Task was moved over position ${taskPosition + 1} of ${
           tasksInColumn.length
-        } in column ${column?.title}`;
+        } in column ${column?.value}`;
       }
     },
     onDragEnd({ active, over }) {
@@ -119,7 +119,7 @@ const Board = () => {
         const overColumnPosition = columnsId.findIndex((id) => id === over.id);
 
         return `Column ${
-          active.data.current.column.title
+          active.data.current.column.value
         } was dropped into position ${overColumnPosition + 1} of ${
           columnsId.length
         }`;
@@ -132,13 +132,13 @@ const Board = () => {
           over.data.current.task.columnId
         );
         if (over.data.current.task.columnId !== pickedUpTaskColumn.current) {
-          return `Task was dropped into column ${column?.title} in position ${
+          return `Task was dropped into column ${column?.value} in position ${
             taskPosition + 1
           } of ${tasksInColumn.length}`;
         }
         return `Task was dropped into position ${taskPosition + 1} of ${
           tasksInColumn.length
-        } in column ${column?.title}`;
+        } in column ${column?.value}`;
       }
       pickedUpTaskColumn.current = null;
     },

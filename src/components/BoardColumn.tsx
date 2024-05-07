@@ -13,7 +13,7 @@ import { GripVertical, Plus } from "lucide-react";
 
 export interface Column {
   id: UniqueIdentifier;
-  title: string;
+  value: string;
 }
 
 export type ColumnType = "Column";
@@ -48,7 +48,7 @@ const BoardColumn = ({ column, tasks, isOverlay }: BoardColumnProps) => {
       column,
     } satisfies ColumnDragData,
     attributes: {
-      roleDescription: `Column: ${column.title}`,
+      roleDescription: `Column: ${column.value}`,
     },
   });
 
@@ -85,11 +85,11 @@ const BoardColumn = ({ column, tasks, isOverlay }: BoardColumnProps) => {
           {...listeners}
           className=" p-1 text-primary/50 -ml-2 h-auto cursor-grab relative"
         >
-          <span className="sr-only">{`Move column: ${column.title}`}</span>
+          <span className="sr-only">{`Move column: ${column.value}`}</span>
           <GripVertical size={16} />
         </Button>
         <div className="flex items-center gap-1 ml-auto">
-          <span className="ml-auto"> {column.title}</span>
+          <span className="ml-auto"> {column.value}</span>
           <Badge variant={"outline"} className="ml-2">
             {tasks.length}
           </Badge>
@@ -132,7 +132,7 @@ export function BoardContainer({ children }: { children: React.ReactNode }) {
         dragging: dndContext.active ? "active" : "default",
       })}
     >
-      <div className="flex gap-4 justify-center items-start h-full pr-3">
+      <div className="flex gap-4 justify-center items-start h-full pr-3 pl-2">
         {children}
       </div>
       <ScrollBar orientation="horizontal" />
