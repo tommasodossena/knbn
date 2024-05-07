@@ -16,6 +16,7 @@ import {
   TouchSensor,
   MouseSensor,
 } from "@dnd-kit/core";
+import { coordinateGetter } from "@/components/BoardKeyboardPreset";
 import { hasDraggableData } from "@/lib/utils";
 
 import { BoardColumn, BoardContainer } from "@/components/BoardColumn";
@@ -38,9 +39,9 @@ const Board = () => {
   const sensors = useSensors(
     useSensor(MouseSensor),
     useSensor(TouchSensor),
-    // useSensor(KeyboardSensor, {
-    //   coordinateGetter: coordinateGetter,
-    // })
+    useSensor(KeyboardSensor, {
+      coordinateGetter: coordinateGetter,
+    })
   );
 
   function getDraggingTaskData(taskId: UniqueIdentifier, columnId: ColumnId) {

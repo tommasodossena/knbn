@@ -8,7 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function BoardsPage() {
   return (
-    <div className="h-full flex flex-col gap-3 pt-2 pr-3">
+    <div className="h-full flex flex-col gap-1 pt-2 pr-3">
       <div className="h-[60px] shrink-0 flex items-center gap-2">
         <Button variant="secondary">Create Board</Button>
         <Input type="search" placeholder="Search Boards" />
