@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Badge } from "@/components/ui/badge";
 import { Task } from "@/components/TaskCard";
+import { DataTableColumnHeader } from "@/components/DataTableColumnHeader";
 import {
   ArrowUp,
   ArrowDown,
@@ -32,11 +32,18 @@ const priorityComponents: { [key: string]: LucideIcon } = {
 const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "id",
-    header: "ID",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Task" />
+    ),
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    enableSorting: false,
+    enableHiding: false,
   },
   {
     accessorKey: "content",
-    header: "Title",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Title" />
+    ),
     cell: ({ row }) => {      
       const label = taskLabels.find((label) => label.value === (row.original.label as string).toLowerCase());      
       
@@ -56,7 +63,9 @@ const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "columnId",
-    header: "Status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
     cell: ({ row }) => {
       const status = taskStatuses.find((status) => status.id === (row.getValue("columnId") as string));
 
@@ -81,7 +90,9 @@ const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "priority",
-    header: "Priority",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Priority" />
+    ),
     cell: ({ row }) => {
       const priority = taskPriorities.find((priority) => priority.value === (row.getValue("priority") as string).toLowerCase());
 

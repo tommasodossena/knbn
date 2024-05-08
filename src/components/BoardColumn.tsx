@@ -89,7 +89,7 @@ const BoardColumn = ({ column, tasks, isOverlay }: BoardColumnProps) => {
           <GripVertical size={16} />
         </Button>
         <div className="flex items-center gap-1 ml-auto">
-          <span className="ml-auto"> {column.value}</span>
+          <span className="ml-auto capitalize">{column.value}</span>
           <Badge variant={"outline"} className="ml-2">
             {tasks.length}
           </Badge>

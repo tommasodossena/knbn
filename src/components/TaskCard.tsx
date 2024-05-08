@@ -85,7 +85,7 @@ const TaskCard = ({ task, isOverlay }: TaskCardProps) => {
           <span className="sr-only">Move task</span>
           <GripVertical size={16} />
         </Button>
-        <Badge variant={"outline"} className="ml-auto font-semibold">
+        <Badge variant={"outline"} className="ml-auto font-semibold capitalize">
           {task.label}
         </Badge>
       </CardHeader>
