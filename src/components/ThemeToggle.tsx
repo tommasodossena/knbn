@@ -40,7 +40,7 @@ const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>(
 
     if (!mounted) {
       return (
-        <Skeleton className={cn("w-full h-10")} />
+        <Skeleton className={cn("w-10 h-10")} />
       )
     }
 

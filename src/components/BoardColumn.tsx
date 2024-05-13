@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { useDndContext, type UniqueIdentifier } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
@@ -7,9 +7,23 @@ import { cva } from "class-variance-authority";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TaskCard, Task } from "@/components/TaskCard";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { GripVertical, Plus } from "lucide-react";
+import { taskLabels, taskStatuses } from "@/data";
 
 export interface Column {
   id: UniqueIdentifier;
@@ -30,6 +44,8 @@ interface BoardColumnProps {
 }
 
 const BoardColumn = ({ column, tasks, isOverlay }: BoardColumnProps) => {
+  const [isClient, setIsClient] = useState(false);
+
   const tasksIds = useMemo(() => {
     return tasks.map((task) => task.id);
   }, [tasks]);
@@ -69,6 +85,10 @@ const BoardColumn = ({ column, tasks, isOverlay }: BoardColumnProps) => {
       },
     }
   );
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   return (
     <Card
@@ -105,10 +125,49 @@ const BoardColumn = ({ column, tasks, isOverlay }: BoardColumnProps) => {
         </CardContent>
       </ScrollArea>
       <CardFooter className="flex justify-center items-center p-2">
-        <Button variant={"ghost"} size={"sidebar"}>
-          <Plus size={16} />
-          <span className="ml-2">Add Task</span>
-        </Button>
+        {isClient && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant={"ghost"} size={"sidebar"}>
+                <Plus size={16} />
+                <span className="ml-2">Add Task</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Task</DialogTitle>
+                <DialogDescription>
+                  Write down the task you want to add to the board.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="Title">Title</Label>
+                  <Input id="Title" placeholder="Get sh*t done" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="Description">Description (optional)</Label>
+                  <Textarea id="Description" placeholder="Write a description" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="Description">Label</Label>
+                  <span>Bug | Feautre | etc...</span>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="Description">Status</Label>
+                  <span>Backlog | Todo | In Progress | Done</span>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="Description">Priority</Label>
+                  <span>Low | Medium | High</span>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Add Task</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
       </CardFooter>
     </Card>
   );

@@ -35,7 +35,7 @@ const UserButton = React.forwardRef<HTMLButtonElement, UserButtonProps>(
 
     if (!isLoaded) {
       return (
-        <Skeleton className={cn("w-full h-10")} />
+        <Skeleton className={cn("w-10 h-10")} />
       )
     }
   
@@ -61,11 +61,6 @@ const UserButton = React.forwardRef<HTMLButtonElement, UserButtonProps>(
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuItem>
