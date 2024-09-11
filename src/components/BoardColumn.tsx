@@ -1,11 +1,18 @@
+import { useState } from "react";
 import { BoardCard } from "./BoardCard";
 import { BoardCardDetail } from "./BoardCardDetail";
 import { Button } from "@/components/ui/button";
 import { CreateCardDialog } from "@/components/CreateCardDialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Text } from "@/components/ui/text";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { Plus, Ellipsis } from "lucide-react";
+import useBoardStore from "@/store/boardStore";
 
 interface BoardColumnProps {
   id: string;
@@ -35,7 +42,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
 
   return (
     <div className="w-[calc(100vw-3.5rem)] sm:w-[calc(100vw/2-2.5rem)] md:w-80 h-fit flex flex-col gap-2 rounded-lg text-card-foreground shadow-sm p-3 bg-gray-100">
-      <BoardColumnHeader value={value} length={cards.length} />
+      <BoardColumnHeader id={id} value={value} length={cards.length} />
       <ScrollArea>
         <div className="flex flex-col gap-2">
           {Array.isArray(cards) &&
@@ -76,14 +83,23 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
 };
 
 interface BoardColumnHeaderProps {
+  id: string;
   value: string;
   length: number;
 }
 
 export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
+  id,
   value,
   length,
 }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const removeColumn = useBoardStore((state) => state.removeColumn);
+
+  const handleDeleteColumn = () => {
+    removeColumn(id);
+  };
+
   return (
     <div className="flex items-center justify-between py-2">
       <Text variant="h5" as="p" className="flex items-start">
@@ -94,6 +110,17 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
           </span>
         )}
       </Text>
+      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+        <DropdownMenuTrigger>
+          <Ellipsis size={16} />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="bottom" align="end">
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleDeleteColumn}>
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
