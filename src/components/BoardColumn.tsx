@@ -1,4 +1,5 @@
 import { BoardCard } from "./BoardCard";
+import { BoardCardDetail } from "./BoardCardDetail";
 import { Button } from "@/components/ui/button";
 import { CreateCardDialog } from "@/components/CreateCardDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,18 +19,33 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
   cards,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<{
+    id: string;
+    title: string;
+    description: string;
+  } | null>(null);
+
+  const handleCardClick = (card: {
+    id: string;
+    title: string;
+    description: string;
+  }) => {
+    setSelectedCard(card);
+  };
 
   return (
-    <div className="w-72 flex flex-col gap-4 rounded-lg border bg-card text-card-foreground shadow-sm p-2">
+    <div className="w-72 h-fit flex flex-col gap-4 rounded-lg border bg-card text-card-foreground shadow-sm p-2">
       <BoardColumnHeader value={value} />
-      <ScrollArea className="h-[500px]">
+      <ScrollArea>
         <div className="flex flex-col gap-2">
           {Array.isArray(cards) &&
             cards.map((card) => (
               <BoardCard
                 key={card.id}
+                id={card.id}
                 title={card.title}
                 description={card.description}
+                onClick={() => handleCardClick(card)}
               />
             ))}
         </div>
@@ -47,6 +63,13 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
         setIsDialogOpen={setIsDialogOpen}
         columnId={id}
       />
+      {selectedCard && (
+        <BoardCardDetail
+          card={selectedCard}
+          isOpen={!!selectedCard}
+          setIsOpen={(isOpen) => !isOpen && setSelectedCard(null)}
+        />
+      )}
     </div>
   );
 };

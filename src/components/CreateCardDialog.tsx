@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import useBoardStore from "@/store/boardStore";
-import { useState } from "react";
 
 interface CreateCardDialogProps {
   isDialogOpen: boolean;
