@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
 import useBoardStore from "@/store/boardStore";
 
 export default function App() {
@@ -26,11 +27,13 @@ export default function App() {
   return (
     <div className="h-screen flex flex-col">
       <div className="h-[60px] flex items-center justify-between gap-2 px-4">
-        <div className="text-2xl font-bold">knbn</div>
+        <Text variant="h3" as="h1">
+          knbn
+        </Text>
         <Button onClick={() => setIsDialogOpen(true)}>Create Column</Button>
       </div>
 
-      <Board columns={columns} />
+      <Board />
 
       {/* TODO: move dialog a separate component */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
