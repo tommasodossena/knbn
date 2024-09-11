@@ -1,8 +1,9 @@
 import { BoardCard } from "./BoardCard";
 import { Button } from "@/components/ui/button";
+import { CreateCardDialog } from "@/components/CreateCardDialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Text } from "@/components/ui/text";
-import useBoardStore from "@/store/boardStore";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 interface BoardColumnProps {
@@ -16,15 +17,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
   value,
   cards,
 }) => {
-  const [newCardTitle, setNewCardTitle] = useState("");
-  const addCard = useBoardStore((state) => state.addCard);
-
-  const handleAddCard = () => {
-    if (newCardTitle.trim()) {
-      addCard(id, newCardTitle, "");
-      setNewCardTitle("");
-    }
-  };
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <div className="w-72 flex flex-col gap-4 rounded-lg border bg-card text-card-foreground shadow-sm p-2">
@@ -41,16 +34,19 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
             ))}
         </div>
       </ScrollArea>
-      <div className="flex items-center justify-between gap-2">
-        <input
-          type="text"
-          value={newCardTitle}
-          onChange={(e) => setNewCardTitle(e.target.value)}
-          placeholder="New card title"
-          className="flex-1 px-2 py-1 border rounded"
-        />
-        <Button onClick={handleAddCard}>Add</Button>
-      </div>
+      <Button
+        variant={"ghost"}
+        className="w-full"
+        onClick={() => setIsDialogOpen(true)}
+      >
+        <Plus size={16} />
+        <span className="ml-2">Add Task</span>
+      </Button>
+      <CreateCardDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        columnId={id}
+      />
     </div>
   );
 };
