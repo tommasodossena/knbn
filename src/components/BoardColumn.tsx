@@ -34,8 +34,8 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
   };
 
   return (
-    <div className="w-72 h-fit flex flex-col gap-4 rounded-lg border bg-card text-card-foreground shadow-sm p-2">
-      <BoardColumnHeader value={value} />
+    <div className="w-[calc(100vw-3.5rem)] sm:w-[calc(100vw/2-2.5rem)] md:w-80 h-fit flex flex-col gap-2 rounded-lg text-card-foreground shadow-sm p-3 bg-gray-100">
+      <BoardColumnHeader value={value} length={cards.length} />
       <ScrollArea>
         <div className="flex flex-col gap-2">
           {Array.isArray(cards) &&
@@ -56,7 +56,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
         onClick={() => setIsDialogOpen(true)}
       >
         <Plus size={16} />
-        <span className="ml-2">Add Task</span>
+        <span className="ml-2">Add Card</span>
       </Button>
       <CreateCardDialog
         isDialogOpen={isDialogOpen}
@@ -66,6 +66,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
       {selectedCard && (
         <BoardCardDetail
           card={selectedCard}
+          columnId={id}
           isOpen={!!selectedCard}
           setIsOpen={(isOpen) => !isOpen && setSelectedCard(null)}
         />
@@ -76,15 +77,22 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
 
 interface BoardColumnHeaderProps {
   value: string;
+  length: number;
 }
 
 export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
   value,
+  length,
 }) => {
   return (
-    <div className="flex items-center justify-between">
-      <Text variant="h5" as="p">
-        {value}
+    <div className="flex items-center justify-between py-2">
+      <Text variant="h5" as="p" className="flex items-start">
+        <span>{value}</span>
+        {length > 0 && (
+          <span className="text-muted-foreground text-xs font-medium ml-1">
+            ({length})
+          </span>
+        )}
       </Text>
     </div>
   );

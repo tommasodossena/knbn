@@ -18,6 +18,13 @@ interface BoardStore {
   addColumn: (value: string) => void;
   removeColumn: (id: string) => void;
   addCard: (columnId: string, title: string, description: string) => void;
+  removeCard: (columnId: string, cardId: string) => void;
+  updateCard: (
+    columnId: string,
+    cardId: string,
+    title: string,
+    description: string,
+  ) => void;
 }
 
 const useBoardStore = create(
@@ -45,6 +52,32 @@ const useBoardStore = create(
                     ...(Array.isArray(column.cards) ? column.cards : []),
                     { id: Date.now().toString(), title, description },
                   ],
+                }
+              : column,
+          ),
+        }));
+      },
+      removeCard: (columnId, cardId) => {
+        set((state) => ({
+          columns: state.columns.map((column) =>
+            column.id === columnId
+              ? {
+                  ...column,
+                  cards: column.cards.filter((card) => card.id !== cardId),
+                }
+              : column,
+          ),
+        }));
+      },
+      updateCard: (columnId, cardId, title, description) => {
+        set((state) => ({
+          columns: state.columns.map((column) =>
+            column.id === columnId
+              ? {
+                  ...column,
+                  cards: column.cards.map((card) =>
+                    card.id === cardId ? { ...card, title, description } : card,
+                  ),
                 }
               : column,
           ),
