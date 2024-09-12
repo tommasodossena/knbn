@@ -17,7 +17,12 @@ import useBoardStore from "@/store/boardStore";
 interface BoardColumnProps {
   id: string;
   value: string;
-  cards: Array<{ id: string; title: string; description: string }>;
+  cards: Array<{
+    id: string;
+    title: string;
+    description: string;
+    createdAt: string;
+  }>;
 }
 
 export const BoardColumn: React.FC<BoardColumnProps> = ({
@@ -30,18 +35,20 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
     id: string;
     title: string;
     description: string;
+    createdAt: string;
   } | null>(null);
 
   const handleCardClick = (card: {
     id: string;
     title: string;
     description: string;
+    createdAt: string;
   }) => {
     setSelectedCard(card);
   };
 
   return (
-    <div className="w-[calc(100vw-3.5rem)] sm:w-[calc(100vw/2-2.5rem)] md:w-80 h-fit flex flex-col gap-2 rounded-lg text-card-foreground shadow-sm p-3 bg-gray-100">
+    <div className="w-[calc(100vw-3.5rem)] sm:w-[calc(100vw/2-2.5rem)] md:w-96 h-fit flex flex-col gap-2 rounded-lg text-card-foreground shadow-sm p-3 bg-gray-100">
       <BoardColumnHeader id={id} value={value} length={cards.length} />
       <ScrollArea>
         <div className="flex flex-col gap-2">
@@ -52,6 +59,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
                 id={card.id}
                 title={card.title}
                 description={card.description}
+                createdAt={card.createdAt}
                 onClick={() => handleCardClick(card)}
               />
             ))}

@@ -5,6 +5,7 @@ interface Card {
   id: string;
   title: string;
   description: string;
+  createdAt: string;
 }
 
 interface Column {
@@ -50,7 +51,12 @@ const useBoardStore = create(
                   ...column,
                   cards: [
                     ...(Array.isArray(column.cards) ? column.cards : []),
-                    { id: Date.now().toString(), title, description },
+                    {
+                      id: Date.now().toString(),
+                      title,
+                      description,
+                      createdAt: new Date().toISOString(), // Add this line
+                    },
                   ],
                 }
               : column,

@@ -9,20 +9,21 @@ import {
 } from "@/components/ui/sheet";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import useBoardStore from "@/store/boardStore";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { format } from "date-fns";
+
 interface Card {
   id: string;
   title: string;
   description: string;
+  createdAt: string;
 }
 
 interface BoardCardDetailProps {
@@ -71,6 +72,14 @@ export function BoardCardDetail({
           <SheetTitle>{card.title}</SheetTitle>
           <SheetDescription>{card.description}</SheetDescription>
         </SheetHeader>
+        <div>
+          <h3 className="font-semibold">Created At</h3>
+          <p>
+            {card.createdAt
+              ? format(new Date(card.createdAt), "EEE, dd MMM yyyy")
+              : "N/A"}
+          </p>
+        </div>
         <div className="mt-auto mb-0 flex flex-col gap-2">
           <Button variant="ghost" className="w-full" onClick={handleDelete}>
             Delete Card
