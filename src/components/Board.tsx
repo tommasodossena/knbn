@@ -4,11 +4,11 @@ import type { DropResult } from "@hello-pangea/dnd";
 import { BoardColumn } from "@/components/BoardColumn";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import useBoardStore from "@/store/boardStore";
+import { useBoardDragAndDrop } from "@/hooks/useBoardDragAndDrop";
 
 export function Board() {
+  const { onDragEnd } = useBoardDragAndDrop();
   const columns = useBoardStore((state) => state.columns);
-  const moveCard = useBoardStore((state) => state.moveCard);
-  const moveColumn = useBoardStore((state) => state.moveColumn);
 
   if (!columns || columns.length === 0) {
     return (
@@ -17,15 +17,6 @@ export function Board() {
       </div>
     );
   }
-
-  const onDragEnd = (result: DropResult) => {
-    const { type } = result;
-    if (type === "COLUMN") {
-      moveColumn(result);
-    } else {
-      moveCard(result);
-    }
-  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
