@@ -34,7 +34,7 @@ export function BoardCard({
 }: BoardCardProps) {
   return (
     <Card
-      className={cn("dark:bg-neutral-900 cursor-pointer", className)}
+      className={cn("dark:bg-neutral-900 cursor-pointer mb-2", className)}
       onClick={onClick}
     >
       <div className="flex gap-2 p-3.5">

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { DropResult } from "@hello-pangea/dnd";
 
 interface Card {
   id: string;
@@ -18,6 +19,7 @@ interface BoardStore {
   columns: Column[];
   addColumn: (value: string) => void;
   removeColumn: (id: string) => void;
+  moveColumn: (result: DropResult) => void;
   addCard: (columnId: string, title: string, description: string) => void;
   removeCard: (columnId: string, cardId: string) => void;
   updateCard: (
@@ -26,6 +28,7 @@ interface BoardStore {
     title: string,
     description: string,
   ) => void;
+  moveCard: (result: DropResult) => void;
 }
 
 const useBoardStore = create(
@@ -42,6 +45,17 @@ const useBoardStore = create(
         set((state) => ({
           columns: state.columns.filter((column) => column.id !== id),
         }));
+      },
+      moveColumn: (result: DropResult) => {
+        const { source, destination } = result;
+        if (!destination) return;
+
+        set((state) => {
+          const newColumns = [...state.columns];
+          const [movedColumn] = newColumns.splice(source.index, 1);
+          newColumns.splice(destination.index, 0, movedColumn);
+          return { columns: newColumns };
+        });
       },
       addCard: (columnId, title, description) => {
         set((state) => ({
@@ -88,6 +102,27 @@ const useBoardStore = create(
               : column,
           ),
         }));
+      },
+      moveCard: (result: DropResult) => {
+        const { source, destination } = result;
+        if (!destination) return;
+
+        set((state) => {
+          const newColumns = [...state.columns];
+          const sourceColumn = newColumns.find(
+            (col) => col.id === source.droppableId,
+          );
+          const destColumn = newColumns.find(
+            (col) => col.id === destination.droppableId,
+          );
+
+          if (sourceColumn && destColumn) {
+            const [movedCard] = sourceColumn.cards.splice(source.index, 1);
+            destColumn.cards.splice(destination.index, 0, movedCard);
+          }
+
+          return { columns: newColumns };
+        });
       },
     }),
     {

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Droppable, Draggable } from "@hello-pangea/dnd";
+import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 import { BoardCard } from "./BoardCard";
 import { BoardCardDetail } from "./BoardCardDetail";
 import { Button } from "@/components/ui/button";
@@ -23,12 +25,14 @@ interface BoardColumnProps {
     description: string;
     createdAt: string;
   }>;
+  dragHandleProps?: DraggableProvidedDragHandleProps;
 }
 
 export const BoardColumn: React.FC<BoardColumnProps> = ({
   id,
   value,
   cards,
+  dragHandleProps,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<{
@@ -49,22 +53,50 @@ export const BoardColumn: React.FC<BoardColumnProps> = ({
 
   return (
     <div className="w-[calc(100vw-3.5rem)] sm:w-[calc(100vw/2-2.5rem)] md:w-96 h-fit flex flex-col gap-2 rounded-lg text-card-foreground shadow-sm p-3 bg-gray-100">
-      <BoardColumnHeader id={id} value={value} length={cards.length} />
-      <ScrollArea>
-        <div className="flex flex-col gap-2">
-          {Array.isArray(cards) &&
-            cards.map((card) => (
-              <BoardCard
-                key={card.id}
-                id={card.id}
-                title={card.title}
-                description={card.description}
-                createdAt={card.createdAt}
-                onClick={() => handleCardClick(card)}
-              />
-            ))}
-        </div>
-      </ScrollArea>
+      <BoardColumnHeader
+        id={id}
+        value={value}
+        length={cards.length}
+        dragHandleProps={dragHandleProps}
+      />
+      <Droppable droppableId={id} type="CARD">
+        {(provided) => (
+          <ScrollArea>
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className="flex flex-col"
+            >
+              {cards.length === 0 && (
+                <div className="flex items-center justify-center h-full">
+                  <Text>Add a card to get started</Text>
+                </div>
+              )}
+              {Array.isArray(cards) &&
+                cards.map((card, index) => (
+                  <Draggable key={card.id} draggableId={card.id} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <BoardCard
+                          id={card.id}
+                          title={card.title}
+                          description={card.description}
+                          createdAt={card.createdAt}
+                          onClick={() => handleCardClick(card)}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              {provided.placeholder}
+            </div>
+          </ScrollArea>
+        )}
+      </Droppable>
       <Button
         variant={"ghost"}
         className="w-full"
@@ -94,12 +126,14 @@ interface BoardColumnHeaderProps {
   id: string;
   value: string;
   length: number;
+  dragHandleProps?: DraggableProvidedDragHandleProps;
 }
 
 export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
   id,
   value,
   length,
+  dragHandleProps,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const removeColumn = useBoardStore((state) => state.removeColumn);
@@ -109,7 +143,10 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-between py-2">
+    <div
+      className="flex items-center justify-between py-2"
+      {...dragHandleProps}
+    >
       <Text variant="h5" as="p" className="flex items-start">
         <span>{value}</span>
         {length > 0 && (
