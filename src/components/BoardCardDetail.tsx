@@ -21,8 +21,7 @@ import { format } from "date-fns";
 
 interface Card {
   id: string;
-  title: string;
-  description: string;
+  value: string;
   createdAt: string;
 }
 
@@ -52,9 +51,12 @@ export function BoardCardDetail({
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
         <DrawerContent className="flex flex-col">
           <DrawerHeader>
-            <DrawerTitle>{card.title}</DrawerTitle>
-            <DrawerDescription>{card.description}</DrawerDescription>
+            <DrawerTitle>{card.value}</DrawerTitle>
+            <DrawerDescription>
+              Created: {format(new Date(card.createdAt), "EEE, dd MMM yyyy")}
+            </DrawerDescription>
           </DrawerHeader>
+
           <DrawerFooter>
             <Button variant="outline" className="w-full" onClick={handleDelete}>
               Delete
@@ -69,17 +71,12 @@ export function BoardCardDetail({
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetContent className="flex flex-col">
         <SheetHeader>
-          <SheetTitle>{card.title}</SheetTitle>
-          <SheetDescription>{card.description}</SheetDescription>
+          <SheetTitle>{card.value}</SheetTitle>
+          <SheetDescription>
+            Created: {format(new Date(card.createdAt), "EEE, dd MMM yyyy")}
+          </SheetDescription>
         </SheetHeader>
-        <div>
-          <h3 className="font-semibold">Created At</h3>
-          <p>
-            {card.createdAt
-              ? format(new Date(card.createdAt), "EEE, dd MMM yyyy")
-              : "N/A"}
-          </p>
-        </div>
+
         <div className="mt-auto mb-0 flex flex-col gap-2">
           <Button variant="ghost" className="w-full" onClick={handleDelete}>
             Delete Card

@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import useBoardStore from "@/store/boardStore";
 
 interface CreateCardDialogProps {
@@ -24,18 +23,14 @@ export function CreateCardDialog({
   setIsDialogOpen,
   columnId,
 }: CreateCardDialogProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [value, setValue] = useState("");
   const addCard = useBoardStore((state) => state.addCard);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim()) {
-      addCard(columnId, title, description);
-      setTitle("");
-      setDescription("");
-      setIsDialogOpen(false);
-    }
+    addCard(columnId, value);
+    setIsDialogOpen(false);
+    setValue("");
   };
 
   return (
@@ -52,27 +47,14 @@ export function CreateCardDialog({
             <div className="grid gap-2">
               <Label htmlFor="title">Title</Label>
               <Input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Get sh*t done"
-                required
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder="Enter card text"
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="description">Description (optional)</Label>
-              <Textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Write a description"
-                className="resize-none"
-              />
-            </div>
-            {/* Other fields (Label, Status, Priority) can be added here later */}
           </div>
           <DialogFooter>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={!value}>
               Add Task
             </Button>
           </DialogFooter>

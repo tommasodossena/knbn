@@ -4,8 +4,7 @@ import type { DropResult } from "@hello-pangea/dnd";
 
 interface Card {
   id: string;
-  title: string;
-  description: string;
+  value: string;
   createdAt: string;
 }
 
@@ -19,15 +18,11 @@ interface BoardStore {
   columns: Column[];
   addColumn: (value: string) => void;
   removeColumn: (id: string) => void;
+  updateColumn: (columnId: string, newTitle: string) => void;
   moveColumn: (result: DropResult) => void;
-  addCard: (columnId: string, title: string, description: string) => void;
+  addCard: (columnId: string, value: string) => void;
   removeCard: (columnId: string, cardId: string) => void;
-  updateCard: (
-    columnId: string,
-    cardId: string,
-    title: string,
-    description: string,
-  ) => void;
+  updateCard: (columnId: string, cardId: string, value: string) => void;
   moveCard: (result: DropResult) => void;
 }
 
@@ -46,6 +41,13 @@ const useBoardStore = create(
           columns: state.columns.filter((column) => column.id !== id),
         }));
       },
+      updateColumn: (columnId, newTitle) => {
+        set((state) => ({
+          columns: state.columns.map((column) =>
+            column.id === columnId ? { ...column, value: newTitle } : column,
+          ),
+        }));
+      },
       moveColumn: (result: DropResult) => {
         const { source, destination } = result;
         if (!destination) return;
@@ -57,7 +59,7 @@ const useBoardStore = create(
           return { columns: newColumns };
         });
       },
-      addCard: (columnId, title, description) => {
+      addCard: (columnId, value) => {
         set((state) => ({
           columns: state.columns.map((column) =>
             column.id === columnId
@@ -67,9 +69,8 @@ const useBoardStore = create(
                     ...(Array.isArray(column.cards) ? column.cards : []),
                     {
                       id: Date.now().toString(),
-                      title,
-                      description,
-                      createdAt: new Date().toISOString(), // Add this line
+                      value,
+                      createdAt: new Date().toISOString(),
                     },
                   ],
                 }
@@ -89,14 +90,14 @@ const useBoardStore = create(
           ),
         }));
       },
-      updateCard: (columnId, cardId, title, description) => {
+      updateCard: (columnId, cardId, value) => {
         set((state) => ({
           columns: state.columns.map((column) =>
             column.id === columnId
               ? {
                   ...column,
                   cards: column.cards.map((card) =>
-                    card.id === cardId ? { ...card, title, description } : card,
+                    card.id === cardId ? { ...card, value } : card,
                   ),
                 }
               : column,

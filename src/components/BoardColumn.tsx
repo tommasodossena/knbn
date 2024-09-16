@@ -2,7 +2,7 @@ import { useState, memo } from "react";
 import useBoardStore from "@/store/boardStore";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
-import { Plus, Ellipsis } from "lucide-react";
+import { Plus, Ellipsis, Trash, PencilLine } from "lucide-react";
 
 import { BoardCard } from "@/components/BoardCard";
 import { BoardCardDetail } from "@/components/BoardCardDetail";
@@ -13,7 +13,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
+import { EditableField } from "@/components/EditableField";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Text } from "@/components/ui/text";
 
@@ -22,8 +26,7 @@ interface BoardColumnProps {
   value: string;
   cards: Array<{
     id: string;
-    title: string;
-    description: string;
+    value: string;
     createdAt: string;
   }>;
   dragHandleProps?: DraggableProvidedDragHandleProps;
@@ -34,26 +37,23 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState<{
       id: string;
-      title: string;
-      description: string;
+      value: string;
       createdAt: string;
     } | null>(null);
 
     const handleCardClick = (card: {
       id: string;
-      title: string;
-      description: string;
+      value: string;
       createdAt: string;
     }) => {
       setSelectedCard(card);
     };
 
     return (
-      <div className="w-[calc(100vw-3.5rem)] sm:w-[calc(100vw/2-2.5rem)] md:w-96 h-fit flex flex-col gap-2 rounded-lg text-card-foreground shadow-sm p-3 bg-gray-100">
+      <div className="w-[calc(100vw-3.5rem)] sm:w-[calc(100vw/2-2.5rem)] md:w-72 h-fit flex flex-col gap-1 rounded-lg text-card-foreground shadow-sm py-2 bg-gray-100">
         <BoardColumnHeader
           id={id}
           value={value}
-          length={cards.length}
           dragHandleProps={dragHandleProps}
         />
         <Droppable droppableId={id} type="CARD">
@@ -65,8 +65,8 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
                 className="flex flex-col"
               >
                 {cards.length === 0 && (
-                  <div className="flex items-center justify-center h-full">
-                    <Text>Add a card to get started</Text>
+                  <div className="flex items-center justify-center h-[43px]">
+                    <Text variant="mutedText">Add a card to get started</Text>
                   </div>
                 )}
                 {Array.isArray(cards) &&
@@ -84,8 +84,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
                         >
                           <BoardCard
                             id={card.id}
-                            title={card.title}
-                            description={card.description}
+                            value={card.value}
                             createdAt={card.createdAt}
                             onClick={() => handleCardClick(card)}
                           />
@@ -127,47 +126,60 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
 interface BoardColumnHeaderProps {
   id: string;
   value: string;
-  length: number;
   dragHandleProps?: DraggableProvidedDragHandleProps;
 }
 
 export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
   id,
   value,
-  length,
   dragHandleProps,
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const removeColumn = useBoardStore((state) => state.removeColumn);
+  const updateColumnTitle = useBoardStore((state) => state.updateColumn);
 
   const handleDeleteColumn = () => {
     removeColumn(id);
   };
 
+  const handleSaveTitle = (newTitle: string) => {
+    updateColumnTitle(id, newTitle);
+  };
+
   return (
-    <div
-      className="flex items-center justify-between py-2"
-      {...dragHandleProps}
-    >
-      <Text variant="h5" as="p" className="flex items-start">
-        <span>{value}</span>
-        {length > 0 && (
-          <span className="text-muted-foreground text-xs font-medium ml-1">
-            ({length})
-          </span>
-        )}
-      </Text>
-      <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-        <DropdownMenuTrigger>
-          <Ellipsis size={16} />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent side="bottom" align="end">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem onSelect={handleDeleteColumn}>
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <div className="flex items-center justify-between p-2" {...dragHandleProps}>
+      <EditableField
+        initialValue={value}
+        onSave={handleSaveTitle}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+      />
+
+      {!isEditing && (
+        <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+          <DropdownMenuTrigger>
+            <Ellipsis size={12} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="bottom" align="end" className="w-[200px]">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <PencilLine className="mr-2 h-4 w-4" />
+                Edit Title
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-red-600"
+                onSelect={handleDeleteColumn}
+              >
+                <Trash className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 };

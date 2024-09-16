@@ -47,7 +47,11 @@ export default function App() {
             onChange={(e) => setColumnName(e.target.value)}
           />
           <DialogFooter>
-            <Button className="w-full" onClick={handleAddColumn}>
+            <Button
+              className="w-full"
+              onClick={handleAddColumn}
+              disabled={!columnName}
+            >
               Add Column
             </Button>
           </DialogFooter>
