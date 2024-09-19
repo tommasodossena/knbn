@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 
 import { fontSans, fontMono } from "@/lib/fonts";
+import { Sidebar } from "@/components/Sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "knbn",
@@ -16,7 +18,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${fontSans.variable} ${fontMono.variable} antialiased`}>
-        {children}
+        <TooltipProvider delayDuration={0}>
+          <div className="grid grid-cols-[auto,minmax(0,1fr)] w-full dark:bg-black bg-white">
+            <Sidebar className="h-screen" />
+            <main className="h-screen">{children}</main>
+          </div>
+        </TooltipProvider>
       </body>
     </html>
   );

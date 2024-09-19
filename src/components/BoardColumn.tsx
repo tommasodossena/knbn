@@ -22,6 +22,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Text } from "@/components/ui/text";
 
 interface BoardColumnProps {
+  boardId: string;
   id: string;
   value: string;
   cards: Array<{
@@ -33,7 +34,7 @@ interface BoardColumnProps {
 }
 
 export const BoardColumn: React.FC<BoardColumnProps> = memo(
-  ({ id, value, cards, dragHandleProps }) => {
+  ({ boardId, id, value, cards, dragHandleProps }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState<{
       id: string;
@@ -50,8 +51,9 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
     };
 
     return (
-      <div className="w-[calc(100vw-3.5rem)] sm:w-[calc(100vw/2-2.5rem)] md:w-72 h-fit flex flex-col gap-1 rounded-lg text-card-foreground shadow-sm py-2 bg-gray-100">
+      <div className="w-[calc(100vw-76px-3.5rem)] sm:w-[calc(100vw/2-76px)] md:w-72 h-fit flex flex-col gap-1 rounded-lg text-card-foreground shadow-sm py-2 bg-gray-100">
         <BoardColumnHeader
+          boardId={boardId}
           id={id}
           value={value}
           dragHandleProps={dragHandleProps}
@@ -108,11 +110,13 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
         <CreateCardDialog
           isDialogOpen={isDialogOpen}
           setIsDialogOpen={setIsDialogOpen}
+          boardId={boardId}
           columnId={id}
         />
         {selectedCard && (
           <BoardCardDetail
             card={selectedCard}
+            boardId={boardId}
             columnId={id}
             isOpen={!!selectedCard}
             setIsOpen={(isOpen) => !isOpen && setSelectedCard(null)}
@@ -124,12 +128,14 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
 );
 
 interface BoardColumnHeaderProps {
+  boardId: string;
   id: string;
   value: string;
   dragHandleProps?: DraggableProvidedDragHandleProps;
 }
 
 export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
+  boardId,
   id,
   value,
   dragHandleProps,
@@ -140,16 +146,17 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
   const updateColumnTitle = useBoardStore((state) => state.updateColumn);
 
   const handleDeleteColumn = () => {
-    removeColumn(id);
+    removeColumn(boardId, id);
   };
 
   const handleSaveTitle = (newTitle: string) => {
-    updateColumnTitle(id, newTitle);
+    updateColumnTitle(boardId, id, newTitle);
   };
 
   return (
     <div className="flex items-center justify-between p-2" {...dragHandleProps}>
       <EditableField
+        variant="h6"
         initialValue={value}
         onSave={handleSaveTitle}
         isEditing={isEditing}
@@ -164,7 +171,7 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
           <DropdownMenuContent side="bottom" align="end" className="w-[200px]">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setIsEditing(true)}>
                 <PencilLine className="mr-2 h-4 w-4" />
                 Edit Title
               </DropdownMenuItem>

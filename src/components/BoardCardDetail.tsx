@@ -27,6 +27,7 @@ interface Card {
 
 interface BoardCardDetailProps {
   card: Card;
+  boardId: string;
   columnId: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -34,6 +35,7 @@ interface BoardCardDetailProps {
 
 export function BoardCardDetail({
   card,
+  boardId,
   columnId,
   isOpen,
   setIsOpen,
@@ -42,9 +44,9 @@ export function BoardCardDetail({
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const handleDelete = useCallback(() => {
-    removeCard(columnId, card.id);
+    removeCard(boardId, columnId, card.id);
     setIsOpen(false);
-  }, [removeCard, columnId, card.id, setIsOpen]);
+  }, [removeCard, boardId, columnId, card.id, setIsOpen]);
 
   if (isMobile) {
     return (

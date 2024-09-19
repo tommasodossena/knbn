@@ -15,12 +15,14 @@ import useBoardStore from "@/store/boardStore";
 interface CreateCardDialogProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (isOpen: boolean) => void;
+  boardId: string;
   columnId: string;
 }
 
 export function CreateCardDialog({
   isDialogOpen,
   setIsDialogOpen,
+  boardId,
   columnId,
 }: CreateCardDialogProps) {
   const [value, setValue] = useState("");
@@ -28,7 +30,7 @@ export function CreateCardDialog({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    addCard(columnId, value);
+    addCard(boardId, columnId, value);
     setIsDialogOpen(false);
     setValue("");
   };

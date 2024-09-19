@@ -14,102 +14,218 @@ interface Column {
   cards: Card[];
 }
 
-interface BoardStore {
+interface Board {
+  id: string;
+  name: string;
   columns: Column[];
-  addColumn: (value: string) => void;
-  removeColumn: (id: string) => void;
-  updateColumn: (columnId: string, newTitle: string) => void;
-  moveColumn: (result: DropResult) => void;
-  addCard: (columnId: string, value: string) => void;
-  removeCard: (columnId: string, cardId: string) => void;
-  updateCard: (columnId: string, cardId: string, value: string) => void;
-  moveCard: (result: DropResult) => void;
+}
+
+interface BoardStore {
+  boards: Board[];
+  addBoard: (name: string) => void;
+  removeBoard: (id: string) => void;
+  getBoardById: (id: string) => Board | undefined;
+  addColumn: (boardId: string, value: string) => void;
+  removeColumn: (boardId: string, id: string) => void;
+  updateColumn: (boardId: string, columnId: string, newTitle: string) => void;
+  moveColumn: (boardId: string, result: DropResult) => void;
+  addCard: (boardId: string, columnId: string, value: string) => void;
+  removeCard: (boardId: string, columnId: string, cardId: string) => void;
+  updateCard: (
+    boardId: string,
+    columnId: string,
+    cardId: string,
+    value: string,
+  ) => void;
+  moveCard: (boardId: string, result: DropResult) => void;
 }
 
 const useBoardStore = create(
   persist<BoardStore>(
-    (set) => ({
-      columns: [],
-      addColumn: (value) => {
+    (set, get) => ({
+      boards: [],
+      addBoard: (name) => {
+        set((state) => ({
+          boards: [
+            ...state.boards,
+            { id: Date.now().toString(), name, columns: [] },
+          ],
+        }));
+      },
+      removeBoard: (id) => {
+        set((state) => ({
+          boards: state.boards.filter((board) => board.id !== id),
+        }));
+      },
+      getBoardById: (id) => {
+        return get().boards.find((board) => board.id === id);
+      },
+      addColumn: (boardId, value) => {
         set((state) => {
+          const board = state.boards.find((board) => board.id === boardId);
+          if (!board) return state;
+
           const newColumn = { id: Date.now().toString(), value, cards: [] };
-          return { columns: [...state.columns, newColumn] };
+          return {
+            boards: state.boards.map((board) =>
+              board.id === boardId
+                ? { ...board, columns: [...board.columns, newColumn] }
+                : board,
+            ),
+          };
         });
       },
-      removeColumn: (id) => {
-        set((state) => ({
-          columns: state.columns.filter((column) => column.id !== id),
-        }));
+      removeColumn: (boardId, id) => {
+        set((state) => {
+          const board = state.boards.find((board) => board.id === boardId);
+          if (!board) return state;
+
+          return {
+            boards: state.boards.map((board) =>
+              board.id === boardId
+                ? {
+                    ...board,
+                    columns: board.columns.filter((column) => column.id !== id),
+                  }
+                : board,
+            ),
+          };
+        });
       },
-      updateColumn: (columnId, newTitle) => {
-        set((state) => ({
-          columns: state.columns.map((column) =>
-            column.id === columnId ? { ...column, value: newTitle } : column,
-          ),
-        }));
+      updateColumn: (boardId, columnId, newTitle) => {
+        set((state) => {
+          const board = state.boards.find((board) => board.id === boardId);
+          if (!board) return state;
+
+          return {
+            boards: state.boards.map((board) =>
+              board.id === boardId
+                ? {
+                    ...board,
+                    columns: board.columns.map((column) =>
+                      column.id === columnId
+                        ? { ...column, value: newTitle }
+                        : column,
+                    ),
+                  }
+                : board,
+            ),
+          };
+        });
       },
-      moveColumn: (result: DropResult) => {
+      moveColumn: (boardId, result: DropResult) => {
         const { source, destination } = result;
         if (!destination) return;
 
         set((state) => {
-          const newColumns = [...state.columns];
+          const board = state.boards.find((board) => board.id === boardId);
+          if (!board) return state;
+
+          const newColumns = [...board.columns];
           const [movedColumn] = newColumns.splice(source.index, 1);
           newColumns.splice(destination.index, 0, movedColumn);
-          return { columns: newColumns };
+
+          return {
+            boards: state.boards.map((board) =>
+              board.id === boardId ? { ...board, columns: newColumns } : board,
+            ),
+          };
         });
       },
-      addCard: (columnId, value) => {
-        set((state) => ({
-          columns: state.columns.map((column) =>
-            column.id === columnId
-              ? {
-                  ...column,
-                  cards: [
-                    ...(Array.isArray(column.cards) ? column.cards : []),
-                    {
-                      id: Date.now().toString(),
-                      value,
-                      createdAt: new Date().toISOString(),
-                    },
-                  ],
-                }
-              : column,
-          ),
-        }));
+      addCard: (boardId, columnId, value) => {
+        set((state) => {
+          const board = state.boards.find((board) => board.id === boardId);
+          if (!board) return state;
+
+          return {
+            boards: state.boards.map((board) =>
+              board.id === boardId
+                ? {
+                    ...board,
+                    columns: board.columns.map((column) =>
+                      column.id === columnId
+                        ? {
+                            ...column,
+                            cards: [
+                              ...(Array.isArray(column.cards)
+                                ? column.cards
+                                : []),
+                              {
+                                id: Date.now().toString(),
+                                value,
+                                createdAt: new Date().toISOString(),
+                              },
+                            ],
+                          }
+                        : column,
+                    ),
+                  }
+                : board,
+            ),
+          };
+        });
       },
-      removeCard: (columnId, cardId) => {
-        set((state) => ({
-          columns: state.columns.map((column) =>
-            column.id === columnId
-              ? {
-                  ...column,
-                  cards: column.cards.filter((card) => card.id !== cardId),
-                }
-              : column,
-          ),
-        }));
+      removeCard: (boardId, columnId, cardId) => {
+        set((state) => {
+          const board = state.boards.find((board) => board.id === boardId);
+          if (!board) return state;
+
+          return {
+            boards: state.boards.map((board) =>
+              board.id === boardId
+                ? {
+                    ...board,
+                    columns: board.columns.map((column) =>
+                      column.id === columnId
+                        ? {
+                            ...column,
+                            cards: column.cards.filter(
+                              (card) => card.id !== cardId,
+                            ),
+                          }
+                        : column,
+                    ),
+                  }
+                : board,
+            ),
+          };
+        });
       },
-      updateCard: (columnId, cardId, value) => {
-        set((state) => ({
-          columns: state.columns.map((column) =>
-            column.id === columnId
-              ? {
-                  ...column,
-                  cards: column.cards.map((card) =>
-                    card.id === cardId ? { ...card, value } : card,
-                  ),
-                }
-              : column,
-          ),
-        }));
+      updateCard: (boardId, columnId, cardId, value) => {
+        set((state) => {
+          const board = state.boards.find((board) => board.id === boardId);
+          if (!board) return state;
+
+          return {
+            boards: state.boards.map((board) =>
+              board.id === boardId
+                ? {
+                    ...board,
+                    columns: board.columns.map((column) =>
+                      column.id === columnId
+                        ? {
+                            ...column,
+                            cards: column.cards.map((card) =>
+                              card.id === cardId ? { ...card, value } : card,
+                            ),
+                          }
+                        : column,
+                    ),
+                  }
+                : board,
+            ),
+          };
+        });
       },
-      moveCard: (result: DropResult) => {
+      moveCard: (boardId, result: DropResult) => {
         const { source, destination } = result;
         if (!destination) return;
 
         set((state) => {
-          const newColumns = [...state.columns];
+          const board = state.boards.find((board) => board.id === boardId);
+          if (!board) return state;
+
+          const newColumns = [...board.columns];
           const sourceColumn = newColumns.find(
             (col) => col.id === source.droppableId,
           );
@@ -122,7 +238,11 @@ const useBoardStore = create(
             destColumn.cards.splice(destination.index, 0, movedCard);
           }
 
-          return { columns: newColumns };
+          return {
+            boards: state.boards.map((board) =>
+              board.id === boardId ? { ...board, columns: newColumns } : board,
+            ),
+          };
         });
       },
     }),
