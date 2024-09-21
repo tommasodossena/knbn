@@ -35,11 +35,10 @@ export default function BoardPage() {
 
   return (
     <div className="h-screen flex flex-col">
-      <div className="h-[60px] flex items-center justify-between p-2">
+      <div className="h-[60px] flex items-center justify-center p-2 my-2">
         <Text variant="h4" as="h2">
           {board.name}
         </Text>
-        <Button onClick={() => setIsDialogOpen(true)}>Create Column</Button>
       </div>
 
       <Board boardId={board.id} />

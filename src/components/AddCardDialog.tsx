@@ -19,7 +19,7 @@ interface CreateCardDialogProps {
   columnId: string;
 }
 
-export function CreateCardDialog({
+export function AddCardDialog({
   isDialogOpen,
   setIsDialogOpen,
   boardId,

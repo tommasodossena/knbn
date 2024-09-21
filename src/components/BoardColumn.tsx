@@ -7,7 +7,7 @@ import { Plus, Ellipsis, Trash, PencilLine } from "lucide-react";
 import { BoardCard } from "@/components/BoardCard";
 import { BoardCardDetail } from "@/components/BoardCardDetail";
 import { Button } from "@/components/ui/button";
-import { CreateCardDialog } from "@/components/CreateCardDialog";
+import { AddCardDialog } from "@/components/AddCardDialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,6 +56,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
           boardId={boardId}
           id={id}
           value={value}
+          lenght={cards.length}
           dragHandleProps={dragHandleProps}
         />
         <Droppable droppableId={id} type="CARD">
@@ -107,12 +108,14 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
           <Plus size={16} />
           <span className="ml-2">Add Card</span>
         </Button>
-        <CreateCardDialog
+
+        <AddCardDialog
           isDialogOpen={isDialogOpen}
           setIsDialogOpen={setIsDialogOpen}
           boardId={boardId}
           columnId={id}
         />
+
         {selectedCard && (
           <BoardCardDetail
             card={selectedCard}
@@ -131,6 +134,7 @@ interface BoardColumnHeaderProps {
   boardId: string;
   id: string;
   value: string;
+  lenght: number;
   dragHandleProps?: DraggableProvidedDragHandleProps;
 }
 
@@ -138,6 +142,7 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
   boardId,
   id,
   value,
+  lenght,
   dragHandleProps,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -155,13 +160,20 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
 
   return (
     <div className="flex items-center justify-between p-2" {...dragHandleProps}>
-      <EditableField
-        variant="h6"
-        initialValue={value}
-        onSave={handleSaveTitle}
-        isEditing={isEditing}
-        setIsEditing={setIsEditing}
-      />
+      <div className="flex-1 flex items-center justify-start gap-2">
+        <EditableField
+          variant="h6"
+          initialValue={value}
+          onSave={handleSaveTitle}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+        />
+        {!isEditing && (
+          <div className="grid place-content-center bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-full tabular-nums px-2 py-1">
+            <Text variant="mutedText">{lenght}</Text>
+          </div>
+        )}
+      </div>
 
       {!isEditing && (
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>

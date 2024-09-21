@@ -33,7 +33,7 @@ export function Board({ boardId }: BoardProps) {
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className="flex w-max mx-auto pl-2"
+              className="flex w-max mx-auto"
             >
               {board.columns.map((column, index) => (
                 <Draggable

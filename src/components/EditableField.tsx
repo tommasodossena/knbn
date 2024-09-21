@@ -60,7 +60,7 @@ export function EditableField({
       onKeyDown={(e) => e.key === "Enter" && setIsEditing(true)}
       tabIndex={0}
       role="button"
-      className="w-full px-1 py-0.5 cursor-default border border-transparent"
+      className="px-1 py-0.5 cursor-default border border-transparent"
     >
       {value}
     </Text>
