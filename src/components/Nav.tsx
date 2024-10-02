@@ -2,7 +2,6 @@
 import type React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
@@ -20,7 +19,7 @@ interface NavProps {
     href?: string;
     label?: string;
     title: string;
-    icon?: LucideIcon;
+    icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     onClick?: () => void;
   }[];
 }
@@ -30,7 +29,7 @@ interface NavItemProps {
     href?: string;
     label?: string;
     title: string;
-    icon?: LucideIcon;
+    icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     onClick?: () => void;
   };
   isCollapsed: boolean;
@@ -41,16 +40,16 @@ const NavItem: React.FC<NavItemProps> = ({ link, isCollapsed, pathname }) => {
   const Component = link.href ? Link : Button;
 
   const isActive = pathname === link.href;
-  const staticClasses = "justify-start transition-all duration-250 ease-linear";
+  const staticClasses = "justify-start";
   const variantClasses = buttonVariants({
     variant: "sidebar",
     size: "sidebar",
   });
   const sizeClasses = isCollapsed
-    ? "h-10 w-10 rounded-3xl hover:rounded-xl"
-    : "rounded-md hover:rounded-md";
+    ? "h-10 w-10 rounded-3xl hover:rounded-xl transition-all duration-250 ease-linear"
+    : "rounded-md hover:rounded-md transition-all duration-250 ease-linear";
   const activeClasses = isActive
-    ? "bg-neutral-900 text-neutral-50 dark:bg-neutral-50/90 dark:text-neutral-900"
+    ? "bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground"
     : "";
   const activeCollapsedClasses = isActive && isCollapsed ? "rounded-xl" : "";
 
@@ -84,7 +83,7 @@ const NavItem: React.FC<NavItemProps> = ({ link, isCollapsed, pathname }) => {
             <motion.div
               layoutId="nav-active"
               transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
-              className="absolute w-2 h-8 -left-1 bg-neutral-900 dark:bg-neutral-50/90 rounded-xl"
+              className="absolute w-2 h-8 -left-1 bg-accent rounded-xl"
             />
           )}
 
@@ -92,7 +91,7 @@ const NavItem: React.FC<NavItemProps> = ({ link, isCollapsed, pathname }) => {
             {link.icon ? (
               <link.icon className="h-4 w-4" />
             ) : (
-              <span className="h-4 w-4 flex items-center justify-center">
+              <span className="h-4 w-4 flex items-center justify-center font-semibold">
                 {link.title.slice(0, 2).toUpperCase()}
               </span>
             )}

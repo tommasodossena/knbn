@@ -17,10 +17,7 @@ export const BoardCard = memo(
   ({ id, value, className, onClick }: BoardCardProps) => {
     return (
       <Card
-        className={cn(
-          "shadow dark:bg-neutral-900 cursor-pointer mb-1.5 mx-2",
-          className,
-        )}
+        className={cn("bg-primary cursor-pointer mb-1.5 mx-2", className)}
         onClick={onClick}
       >
         <CardHeader>

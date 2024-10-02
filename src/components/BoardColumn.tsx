@@ -2,8 +2,7 @@ import { useState, memo } from "react";
 import useBoardStore from "@/store/boardStore";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
-import { Plus, Ellipsis, Trash, PencilLine } from "lucide-react";
-
+import { Minus, Plus, Trash } from "@/components/ui/icon";
 import { BoardCard } from "@/components/BoardCard";
 import { BoardCardDetail } from "@/components/BoardCardDetail";
 import { Button } from "@/components/ui/button";
@@ -51,7 +50,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
     };
 
     return (
-      <div className="w-[calc(100vw-76px-3.5rem)] sm:w-[calc(100vw/2-76px)] md:w-72 h-fit flex flex-col gap-1 rounded-lg text-card-foreground shadow-sm py-2 bg-gray-100">
+      <div className="w-[calc(100vw-76px-3.5rem)] sm:w-[calc(100vw/2-76px)] md:w-72 flex flex-col rounded-lg text-card-foreground shadow-sm bg-gray-100 min-h-[100px] max-h-full">
         <BoardColumnHeader
           boardId={boardId}
           id={id}
@@ -59,13 +58,14 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
           lenght={cards.length}
           dragHandleProps={dragHandleProps}
         />
+
         <Droppable droppableId={id} type="CARD">
           {(provided) => (
-            <ScrollArea>
+            <ScrollArea className="flex-grow overflow-y-auto">
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="flex flex-col"
+                className="flex flex-col p-2"
               >
                 {cards.length === 0 && (
                   <div className="flex items-center justify-center h-[43px]">
@@ -100,14 +100,16 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
             </ScrollArea>
           )}
         </Droppable>
-        <Button
-          variant={"ghost"}
-          className="w-full"
-          onClick={() => setIsDialogOpen(true)}
-        >
-          <Plus size={16} />
-          <span className="ml-2">Add Card</span>
-        </Button>
+        <div className="p-2 mt-auto">
+          <Button
+            variant={"ghost"}
+            className="w-full"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            <Plus />
+            <span className="ml-2">Add Card</span>
+          </Button>
+        </div>
 
         <AddCardDialog
           isDialogOpen={isDialogOpen}
@@ -169,8 +171,8 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
           setIsEditing={setIsEditing}
         />
         {!isEditing && (
-          <div className="grid place-content-center bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-full tabular-nums px-2 py-1">
-            <Text variant="mutedText">{lenght}</Text>
+          <div className="grid place-content-center border border-foreground/15 rounded-md tabular-nums min-w-6 h-6">
+            <Text className="text-foreground text-xs">{lenght}</Text>
           </div>
         )}
       </div>
@@ -178,13 +180,17 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
       {!isEditing && (
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
           <DropdownMenuTrigger>
-            <Ellipsis size={12} />
+            <Minus className="p-1" />
           </DropdownMenuTrigger>
-          <DropdownMenuContent side="bottom" align="end" className="w-[200px]">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuContent
+            side="bottom"
+            sideOffset={10}
+            align="end"
+            className="w-[200px]"
+          >
+            {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={() => setIsEditing(true)}>
-                <PencilLine className="mr-2 h-4 w-4" />
                 Edit Title
               </DropdownMenuItem>
               <DropdownMenuSeparator />

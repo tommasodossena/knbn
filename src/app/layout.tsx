@@ -19,7 +19,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <body className={`${fontSans.variable} ${fontMono.variable} antialiased`}>
         <TooltipProvider delayDuration={0}>
-          <div className="grid grid-cols-[auto,minmax(0,1fr)] w-full dark:bg-black bg-white font-mono">
+          <div className="grid grid-cols-[auto,minmax(0,1fr)] w-full bg-background text-foreground font-mono">
             <Sidebar className="h-screen" />
             <main className="h-screen">{children}</main>
           </div>

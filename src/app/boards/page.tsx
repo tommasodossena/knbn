@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -17,16 +17,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CircleCheckBig } from "lucide-react";
+import { Plus, Tasks } from "@/components/ui/icon";
+
 import useBoardStore from "@/store/boardStore";
 import { AddBoardDialog } from "@/components/AddBoardDialog";
 
 export default function BoardsPage() {
   const { boards, addBoard, removeBoard } = useBoardStore();
-  const [newBoardName, setNewBoardName] = useState("");
   const [isAddBoardDialogOpen, setIsAddBoardDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [boardToDelete, setBoardToDelete] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleAddBoard = (boardName: string) => {
     addBoard(boardName);
@@ -38,18 +39,43 @@ export default function BoardsPage() {
     setBoardToDelete(null);
   };
 
+  const searchBoards = useMemo(() => {
+    return boards.filter((board) =>
+      board.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [boards, searchTerm]);
+
+  const getTotalCards = (boardId: string) => {
+    const board = useBoardStore.getState().getBoardById(boardId);
+    return (
+      board?.columns.reduce(
+        (total, column) => total + column.cards.length,
+        0,
+      ) || 0
+    );
+  };
+
   return (
     <>
-      <div className="h-full flex flex-col gap-1 p-2 pr-4 bg-white dark:bg-black">
+      <div className="h-full flex flex-col gap-1 p-2 pr-4">
         <div className="h-[60px] shrink-0 flex items-center gap-2">
-          <Button onClick={() => setIsAddBoardDialogOpen(true)}>
-            Add Board
+          <Button
+            variant="white"
+            size="icon"
+            className="rounded-full text-accent "
+            onClick={() => setIsAddBoardDialogOpen(true)}
+          >
+            <Plus />
           </Button>
-          <Input value={newBoardName} placeholder="Search Boards" />
+          <Input
+            placeholder="Search Boards"
+            className="bg-white rounded-full border-none px-5"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
         <ScrollArea className="flex-1">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pb-2">
-            {boards.map((board) => (
+            {searchBoards.map((board) => (
               <Card className="dark:bg-neutral-900" key={board.id}>
                 <CardHeader>
                   <CardTitle>{board.name}</CardTitle>
@@ -74,8 +100,8 @@ export default function BoardsPage() {
                       </Button>
                     </div>
                     <div className="flex items-center gap-2">
-                      <CircleCheckBig size={14} />
-                      <Text variant="p">2/14</Text>
+                      <Tasks />
+                      <Text variant="p">{getTotalCards(board.id)}</Text>
                     </div>
                   </div>
                 </CardContent>

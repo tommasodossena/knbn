@@ -3,15 +3,13 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
-  PanelRightClose,
-  PanelRightOpen,
-  Compass,
+  ChevronLeft,
+  ChevronRight,
+  DarkLight,
+  Gear,
+  GridCirclePlus,
   Plus,
-  Sun,
-  Moon,
-  Settings,
-} from "lucide-react";
-
+} from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import { Nav } from "@/components/Nav";
 import { Separator } from "@/components/ui/separator";
@@ -51,7 +49,7 @@ export const Sidebar = ({
     {
       title: "Boards List",
       href: "/boards",
-      icon: Compass,
+      icon: GridCirclePlus,
     },
     ...boardLinks,
     {
@@ -77,7 +75,7 @@ export const Sidebar = ({
         }}
         className={cn(className, "p-2")}
       >
-        <div className="w-full h-full flex flex-col justify-between rounded-md bg-neutral-100 dark:bg-neutral-900">
+        <div className="w-full h-full flex flex-col justify-between rounded-md bg-white shadow-md">
           <div className="flex flex-col items-center w-full">
             <div
               className={cn(
@@ -88,7 +86,7 @@ export const Sidebar = ({
               <MotionText
                 variant="h4"
                 as="h1"
-                className={cn(isCollapsed && "sr-only")}
+                className={cn(isCollapsed && "sr-only", "text-accent")}
                 initial={false}
                 animate={{
                   opacity: isCollapsed ? 0 : 1,
@@ -103,7 +101,7 @@ export const Sidebar = ({
                 knbn
               </MotionText>
               <Button variant="outline" size="icon" onClick={toggleSidebar}>
-                {isCollapsed ? <PanelRightClose /> : <PanelRightOpen />}
+                {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
                 {!isCollapsed && (
                   <span className="sr-only">Toggle Sidebar</span>
                 )}
@@ -124,7 +122,7 @@ export const Sidebar = ({
                   <motion.div
                     transition={{ type: "spring", stiffness: 700, damping: 30 }}
                   >
-                    <Sun size="20" strokeWidth={1.75} />
+                    <DarkLight />
                   </motion.div>
                   <motion.div
                     initial={false}
@@ -137,7 +135,7 @@ export const Sidebar = ({
 
               {/* Settings Button */}
               <Button variant="outline" size={isCollapsed ? "icon" : "sidebar"}>
-                <Settings size="20" strokeWidth={1.5} />
+                <Gear />
                 <motion.div
                   initial={false}
                   className={cn("pl-2", isCollapsed && "sr-only")}

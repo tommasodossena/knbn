@@ -45,7 +45,7 @@ export function Board({ boardId }: BoardProps) {
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      className="mr-3"
+                      className="mr-3 max-h-[calc(100vh-76px)] pb-4"
                     >
                       <BoardColumn
                         boardId={boardId}

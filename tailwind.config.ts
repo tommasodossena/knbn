@@ -57,6 +57,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontSize: {
+        xs: "0.6rem",
         sm: "0.675rem",
         base: "0.85rem",
         md: "0.85rem",
