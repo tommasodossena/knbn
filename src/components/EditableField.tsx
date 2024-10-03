@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Text } from "@/components/ui/text";
 import type { TypographyProps } from "@/components/ui/text";
+import { cn } from "@/lib/utils";
 
 interface EditableFieldProps {
   initialValue: string;
@@ -9,6 +10,7 @@ interface EditableFieldProps {
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
   variant?: NonNullable<TypographyProps["variant"]>;
+  className?: string;
 }
 
 export function EditableField({
@@ -17,6 +19,7 @@ export function EditableField({
   isEditing,
   setIsEditing,
   variant = "smallText",
+  className,
 }: EditableFieldProps) {
   const [value, setValue] = useState(initialValue);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -60,7 +63,10 @@ export function EditableField({
       onKeyDown={(e) => e.key === "Enter" && setIsEditing(true)}
       tabIndex={0}
       role="button"
-      className="px-1 py-0.5 cursor-default border border-transparent"
+      className={cn(
+        "px-1 py-0.5 cursor-default border border-transparent",
+        className,
+      )}
     >
       {value}
     </Text>

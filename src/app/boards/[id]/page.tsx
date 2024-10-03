@@ -103,15 +103,18 @@ export default function BoardPage() {
         )}
 
         <Button
-          variant="default"
           size="icon"
-          className="rounded-full shadow-lg transition-transform duration-200 ease-in-out mb-2"
+          className="rounded-full aspect-square bg-white dark:bg-sidebar text-accent border border-primary-foreground/40 outline outline-2 outline-secondary hover:bg-secondary dark:hover:bg-secondary hover:shadow-inner hover:shadow-foreground/15 dark:border-input dark:border-x-0 dark:border-b-0 dark:outline-secondary/50 mb-2"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          style={{
-            transform: isMenuOpen ? "rotate(45deg)" : "rotate(0deg)",
-          }}
         >
-          <Plus className="h-6 w-6" />
+          <div
+            className="transition-transform duration-200 ease-in-out"
+            style={{
+              transform: isMenuOpen ? "rotate(45deg)" : "rotate(0deg)",
+            }}
+          >
+            <Plus className="h-6 w-6" />
+          </div>
         </Button>
       </div>
 

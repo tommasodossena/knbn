@@ -134,7 +134,7 @@ export function Nav({ isCollapsed, links }: NavProps) {
       data-collapsed={isCollapsed}
       className="group w-full max-h-[calc(100vh-182px)]"
     >
-      <nav className="grid gap-2 p-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2 shrink-0 relative">
+      <nav className="grid gap-2 p-2 py-2.5 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2 shrink-0 relative">
         {links.map((link, index) => (
           <NavItem
             key={`${link.title}-${index}`}

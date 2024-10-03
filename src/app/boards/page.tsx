@@ -60,23 +60,22 @@ export default function BoardsPage() {
       <div className="h-full flex flex-col gap-1 p-2 pr-4">
         <div className="h-[60px] shrink-0 flex items-center gap-2">
           <Button
-            variant="white"
             size="icon"
-            className="rounded-full text-accent "
+            className="rounded-full aspect-square bg-white dark:bg-sidebar text-accent border border-primary-foreground/40 outline outline-2 outline-secondary hover:bg-secondary dark:hover:bg-secondary hover:shadow-inner hover:shadow-foreground/15 dark:border-input dark:border-x-0 dark:border-b-0 dark:outline-secondary/50"
             onClick={() => setIsAddBoardDialogOpen(true)}
           >
             <Plus />
           </Button>
           <Input
             placeholder="Search Boards"
-            className="bg-white rounded-full border-none px-5"
+            className="bg-secondary text-accent rounded-full shadow-inner shadow-foreground/15 dark:shadow-black/10 border-t-0 border-x-0 focus-visible:ring-0 px-5"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <ScrollArea className="flex-1">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 pb-2">
             {searchBoards.map((board) => (
-              <Card className="dark:bg-neutral-900" key={board.id}>
+              <Card className="bg-card text-card-foreground" key={board.id}>
                 <CardHeader>
                   <CardTitle>{board.name}</CardTitle>
                 </CardHeader>
@@ -101,7 +100,9 @@ export default function BoardsPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Tasks />
-                      <Text variant="p">{getTotalCards(board.id)}</Text>
+                      <Text variant="p" className="text-accent">
+                        {getTotalCards(board.id)}
+                      </Text>
                     </div>
                   </div>
                 </CardContent>

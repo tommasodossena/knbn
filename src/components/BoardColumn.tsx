@@ -57,7 +57,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
     };
 
     return (
-      <div className="w-[calc(100vw-76px-3.5rem)] sm:w-[calc(100vw/2-76px)] md:w-72 flex flex-col rounded-lg text-card-foreground shadow-sm bg-gray-100 min-h-[100px] max-h-full">
+      <div className="w-[calc(100vw-76px-3.5rem)] sm:w-[calc(100vw/2-76px)] md:w-72 min-h-[100px] max-h-full flex flex-col rounded-lg bg-card text-card-foreground shadow-sm">
         <BoardColumnHeader
           boardId={boardId}
           id={id}
@@ -179,10 +179,11 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
           onSave={handleSaveTitle}
           isEditing={isEditing}
           setIsEditing={setIsEditing}
+          className="text-accent"
         />
         {!isEditing && (
-          <div className="grid place-content-center border border-foreground/15 rounded-md tabular-nums min-w-6 h-6">
-            <Text className="text-foreground text-xs">{lenght}</Text>
+          <div className="grid place-content-center border border-foreground/15 dark:border-accent/15 rounded-md tabular-nums min-w-6 h-6">
+            <Text className="text-xs text-accent">{lenght}</Text>
           </div>
         )}
       </div>

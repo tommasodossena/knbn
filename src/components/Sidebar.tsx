@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
@@ -32,6 +33,7 @@ export const Sidebar = ({
   defaultCollapsed = true,
   className,
 }: SidebarProps) => {
+  const { theme, setTheme } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
   const [isAddBoardDialogOpen, setIsAddBoardDialogOpen] = useState(false);
   const { boards, addBoard } = useBoardStore();
@@ -75,7 +77,7 @@ export const Sidebar = ({
         }}
         className={cn(className, "p-2")}
       >
-        <div className="w-full h-full flex flex-col justify-between rounded-md bg-white shadow-md">
+        <div className="w-full h-full flex flex-col justify-between rounded-md bg-sidebar text-sidebar-foreground shadow-md">
           <div className="flex flex-col items-center w-full">
             <div
               className={cn(
@@ -108,16 +110,20 @@ export const Sidebar = ({
               </Button>
             </div>
 
-            <Separator />
+            <Separator className="bg-sidebar-foreground" />
 
             <Nav isCollapsed={isCollapsed} links={navLinks} />
           </div>
 
           <div className="group flex flex-col items-center gap-2 pb-2">
-            <Separator />
+            <Separator className="bg-sidebar-foreground" />
             <div className="w-full flex flex-col items-center gap-2 px-2">
               {/* Theme Button */}
-              <Button variant="outline" size={isCollapsed ? "icon" : "sidebar"}>
+              <Button
+                variant="outline"
+                size={isCollapsed ? "icon" : "sidebar"}
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              >
                 <div className="w-full flex items-center justify-center">
                   <motion.div
                     transition={{ type: "spring", stiffness: 700, damping: 30 }}
