@@ -35,7 +35,7 @@ export function AddBoardDialog({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Board</DialogTitle>
+          <DialogTitle className="text-accent">Add Board</DialogTitle>
           <DialogDescription>
             Add a new board to your workspace.
           </DialogDescription>
@@ -44,6 +44,7 @@ export function AddBoardDialog({
           value={newBoardName}
           onChange={(e) => setNewBoardName(e.target.value)}
           placeholder="Board Name"
+          className="text-accent placeholder:text-accent/50"
         />
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>

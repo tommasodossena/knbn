@@ -72,7 +72,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="flex flex-col p-2 pb-0"
+                className="flex flex-col px-2"
               >
                 {cards.length === 0 && (
                   <div className="flex items-center justify-center h-[43px]">
@@ -171,7 +171,10 @@ export const BoardColumnHeader: React.FC<BoardColumnHeaderProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-between p-2" {...dragHandleProps}>
+    <div
+      className="flex items-center justify-between px-2 py-3"
+      {...dragHandleProps}
+    >
       <div className="flex-1 flex items-center justify-start gap-2">
         <EditableField
           variant="h6"

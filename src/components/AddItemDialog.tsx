@@ -46,17 +46,17 @@ export function AddItemDialog({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className="text-accent">{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="title">{inputLabel}</Label>
+          <div className="grid gap-4 pb-4">
+            <div className="grid gap-2 text-accent">
               <Input
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder={`Enter ${inputLabel.toLowerCase()}`}
+                className="text-accent"
               />
             </div>
             {children}

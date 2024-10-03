@@ -141,10 +141,10 @@ export default function BoardPage() {
           value={selectedColumnId || undefined}
           onValueChange={(value) => setSelectedColumnId(value)}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full text-accent/75">
             <SelectValue placeholder="Select a column" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="text-accent">
             {board.columns.map((column) => (
               <SelectItem key={column.id} value={column.id}>
                 {column.value}
