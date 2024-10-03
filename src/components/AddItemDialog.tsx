@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { ReactNode } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,54 +11,59 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import useBoardStore from "@/store/boardStore";
 
-interface CreateCardDialogProps {
-  isDialogOpen: boolean;
-  setIsDialogOpen: (isOpen: boolean) => void;
-  boardId: string;
-  columnId: string;
+interface AddItemDialogProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  onSubmit: (value: string) => void;
+  title: string;
+  description: string;
+  inputLabel: string;
+  submitLabel: string;
+  children?: ReactNode;
 }
 
-export function AddCardDialog({
-  isDialogOpen,
-  setIsDialogOpen,
-  boardId,
-  columnId,
-}: CreateCardDialogProps) {
+export function AddItemDialog({
+  isOpen,
+  setIsOpen,
+  onSubmit,
+  title,
+  description,
+  inputLabel,
+  submitLabel,
+  children,
+}: AddItemDialogProps) {
   const [value, setValue] = useState("");
-  const addCard = useBoardStore((state) => state.addCard);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    addCard(boardId, columnId, value);
-    setIsDialogOpen(false);
+    onSubmit(value);
+    setIsOpen(false);
     setValue("");
   };
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Task</DialogTitle>
-          <DialogDescription>
-            Write down the task you want to add to the board.
-          </DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">{inputLabel}</Label>
               <Input
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                placeholder="Enter card text"
+                placeholder={`Enter ${inputLabel.toLowerCase()}`}
               />
             </div>
+            {children}
           </div>
           <DialogFooter>
             <Button type="submit" className="w-full" disabled={!value}>
-              Add Task
+              {submitLabel}
             </Button>
           </DialogFooter>
         </form>

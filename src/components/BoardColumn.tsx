@@ -2,11 +2,12 @@ import { useState, memo } from "react";
 import useBoardStore from "@/store/boardStore";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
 import type { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
-import { Minus, Plus, Trash } from "@/components/ui/icon";
+import { AddItemDialog } from "@/components/AddItemDialog";
 import { BoardCard } from "@/components/BoardCard";
 import { BoardCardDetail } from "@/components/BoardCardDetail";
 import { Button } from "@/components/ui/button";
-import { AddCardDialog } from "@/components/AddCardDialog";
+import { Minus, Plus, Trash } from "@/components/ui/icon";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,12 +42,18 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
       createdAt: string;
     } | null>(null);
 
+    const addCard = useBoardStore((state) => state.addCard);
+
     const handleCardClick = (card: {
       id: string;
       value: string;
       createdAt: string;
     }) => {
       setSelectedCard(card);
+    };
+
+    const handleAddCard = (cardTitle: string) => {
+      addCard(boardId, id, cardTitle);
     };
 
     return (
@@ -65,7 +72,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="flex flex-col p-2"
+                className="flex flex-col p-2 pb-0"
               >
                 {cards.length === 0 && (
                   <div className="flex items-center justify-center h-[43px]">
@@ -100,7 +107,7 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
             </ScrollArea>
           )}
         </Droppable>
-        <div className="p-2 mt-auto">
+        <div className="p-2">
           <Button
             variant={"ghost"}
             className="w-full"
@@ -111,11 +118,14 @@ export const BoardColumn: React.FC<BoardColumnProps> = memo(
           </Button>
         </div>
 
-        <AddCardDialog
-          isDialogOpen={isDialogOpen}
-          setIsDialogOpen={setIsDialogOpen}
-          boardId={boardId}
-          columnId={id}
+        <AddItemDialog
+          isOpen={isDialogOpen}
+          setIsOpen={setIsDialogOpen}
+          onSubmit={handleAddCard}
+          title="Add Card"
+          description="Enter a title for the new card."
+          inputLabel="Card Title"
+          submitLabel="Add Card"
         />
 
         {selectedCard && (
