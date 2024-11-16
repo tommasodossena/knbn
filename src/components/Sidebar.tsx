@@ -18,7 +18,7 @@ import { Text } from "@/components/ui/text";
 import useBoardStore from "@/store/boardStore";
 import { AddBoardDialog } from "@/components/AddBoardDialog";
 
-const MotionText = motion(Text);
+const MotionText = motion.create(Text);
 
 interface SidebarProps {
   collapsedSize?: number;

@@ -14,7 +14,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-  DropdownMenuLabel,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { EditableField } from "@/components/EditableField";
@@ -33,114 +32,114 @@ interface BoardColumnProps {
   dragHandleProps?: DraggableProvidedDragHandleProps;
 }
 
-export const BoardColumn: React.FC<BoardColumnProps> = memo(
-  ({ boardId, id, value, cards, dragHandleProps }) => {
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedCard, setSelectedCard] = useState<{
-      id: string;
-      value: string;
-      createdAt: string;
-    } | null>(null);
+export const BoardColumn: React.FC<BoardColumnProps> = ({
+  boardId,
+  id,
+  value,
+  cards,
+  dragHandleProps,
+}) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<{
+    id: string;
+    value: string;
+    createdAt: string;
+  } | null>(null);
 
-    const addCard = useBoardStore((state) => state.addCard);
+  const addCard = useBoardStore((state) => state.addCard);
 
-    const handleCardClick = (card: {
-      id: string;
-      value: string;
-      createdAt: string;
-    }) => {
-      setSelectedCard(card);
-    };
+  const handleCardClick = (card: {
+    id: string;
+    value: string;
+    createdAt: string;
+  }) => {
+    setSelectedCard(card);
+  };
 
-    const handleAddCard = (cardTitle: string) => {
-      addCard(boardId, id, cardTitle);
-    };
+  const handleAddCard = (cardTitle: string) => {
+    addCard(boardId, id, cardTitle);
+  };
 
-    return (
-      <div className="w-[calc(100vw-76px-3.5rem)] sm:w-[calc(100vw/2-76px)] md:w-72 min-h-[100px] max-h-full flex flex-col rounded-lg bg-card text-card-foreground shadow-sm">
-        <BoardColumnHeader
-          boardId={boardId}
-          id={id}
-          value={value}
-          lenght={cards.length}
-          dragHandleProps={dragHandleProps}
-        />
+  return (
+    <div className="w-[calc(100vw-76px-3.5rem)] sm:w-[calc(100vw/2-76px)] md:w-72 min-h-[100px] max-h-full flex flex-col rounded-lg bg-card text-card-foreground shadow-sm">
+      <BoardColumnHeader
+        boardId={boardId}
+        id={id}
+        value={value}
+        lenght={cards?.length || 0}
+        dragHandleProps={dragHandleProps}
+      />
 
-        <Droppable droppableId={id} type="CARD">
-          {(provided) => (
-            <ScrollArea className="flex-grow overflow-y-auto">
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="flex flex-col px-2"
-              >
-                {cards.length === 0 && (
-                  <div className="flex items-center justify-center h-[43px]">
-                    <Text variant="mutedText">Add a card to get started</Text>
-                  </div>
-                )}
-                {Array.isArray(cards) &&
-                  cards.map((card, index) => (
-                    <Draggable
-                      key={card.id}
-                      draggableId={card.id}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <BoardCard
-                            id={card.id}
-                            value={card.value}
-                            createdAt={card.createdAt}
-                            onClick={() => handleCardClick(card)}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                {provided.placeholder}
-              </div>
-            </ScrollArea>
-          )}
-        </Droppable>
-        <div className="p-2">
-          <Button
-            variant={"ghost"}
-            className="w-full"
-            onClick={() => setIsDialogOpen(true)}
-          >
-            <Plus />
-            <span className="ml-2">Add Card</span>
-          </Button>
-        </div>
-
-        <AddItemDialog
-          isOpen={isDialogOpen}
-          setIsOpen={setIsDialogOpen}
-          onSubmit={handleAddCard}
-          title="Add Card"
-          description="Enter a title for the new card."
-          inputLabel="Card Title"
-          submitLabel="Add Card"
-        />
-
-        {selectedCard && (
-          <BoardCardDetail
-            card={selectedCard}
-            boardId={boardId}
-            columnId={id}
-            isOpen={!!selectedCard}
-            setIsOpen={(isOpen) => !isOpen && setSelectedCard(null)}
-          />
+      <Droppable droppableId={id} type="CARD">
+        {(provided) => (
+          <ScrollArea className="flex-grow overflow-y-auto">
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className="flex flex-col px-2"
+            >
+              {cards.length === 0 && (
+                <div className="flex items-center justify-center h-[43px]">
+                  <Text variant="mutedText">Add a card to get started</Text>
+                </div>
+              )}
+              {Array.isArray(cards) &&
+                cards.map((card, index) => (
+                  <Draggable key={card.id} draggableId={card.id} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <BoardCard
+                          id={card.id}
+                          value={card.value}
+                          createdAt={card.createdAt}
+                          onClick={() => handleCardClick(card)}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              {provided.placeholder}
+            </div>
+          </ScrollArea>
         )}
+      </Droppable>
+      <div className="p-2">
+        <Button
+          variant={"ghost"}
+          className="w-full"
+          onClick={() => setIsDialogOpen(true)}
+        >
+          <Plus />
+          <span className="ml-2">Add Card</span>
+        </Button>
       </div>
-    );
-  },
-);
+
+      <AddItemDialog
+        isOpen={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+        onSubmit={handleAddCard}
+        title="Add Card"
+        description="Enter a title for the new card."
+        inputLabel="Card Title"
+        submitLabel="Add Card"
+      />
+
+      {selectedCard && (
+        <BoardCardDetail
+          card={selectedCard}
+          boardId={boardId}
+          columnId={id}
+          isOpen={!!selectedCard}
+          setIsOpen={(isOpen) => !isOpen && setSelectedCard(null)}
+        />
+      )}
+    </div>
+  );
+};
 
 interface BoardColumnHeaderProps {
   boardId: string;
