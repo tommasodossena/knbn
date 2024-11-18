@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -21,6 +21,7 @@ import { Plus, Tasks } from "@/components/ui/icon";
 
 import useBoardStore from "@/store/boardStore";
 import { AddBoardDialog } from "@/components/AddBoardDialog";
+import { DEFAULT_BOARD } from "@/lib/constants";
 
 export default function BoardsPage() {
   const { boards, addBoard, removeBoard } = useBoardStore();
@@ -54,6 +55,16 @@ export default function BoardsPage() {
       ) || 0
     );
   };
+
+  useEffect(() => {
+    // Add default board only if there are no boards
+    const store = useBoardStore.getState();
+    if (store.boards.length === 0) {
+      store.addBoard(DEFAULT_BOARD.name, {
+        columns: DEFAULT_BOARD.columns,
+      });
+    }
+  }, []);
 
   return (
     <>

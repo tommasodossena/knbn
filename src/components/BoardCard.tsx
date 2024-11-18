@@ -18,13 +18,16 @@ export const BoardCard = memo(
     return (
       <Card
         className={cn(
-          "w-full bg-sidebar-foreground cursor-pointer mb-1.5 mx-auto",
+          "w-full bg-sidebar-foreground cursor-pointer mb-1.5",
           className,
         )}
         onClick={onClick}
       >
-        <CardHeader>
-          <Text variant="smallText" className="text-accent">
+        <CardHeader className="p-3">
+          <Text
+            variant="smallText"
+            className="text-accent break-words whitespace-pre-wrap"
+          >
             {value}
           </Text>
         </CardHeader>

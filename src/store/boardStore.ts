@@ -22,7 +22,7 @@ interface Board {
 
 interface BoardStore {
   boards: Board[];
-  addBoard: (name: string) => void;
+  addBoard: (name: string, initialBoard?: Partial<Board>) => void;
   removeBoard: (id: string) => void;
   getBoardById: (id: string) => Board | undefined;
   addColumn: (boardId: string, value: string) => void;
@@ -44,11 +44,16 @@ const useBoardStore = create(
   persist<BoardStore>(
     (set, get) => ({
       boards: [],
-      addBoard: (name) => {
+      addBoard: (name, initialBoard?: Partial<Board>) => {
         set((state) => ({
           boards: [
             ...state.boards,
-            { id: Date.now().toString(), name, columns: [] },
+            {
+              id: Date.now().toString(),
+              name,
+              columns: initialBoard?.columns || [],
+              ...initialBoard,
+            },
           ],
         }));
       },
